@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gradient-to-br from-primary via-secondary to-dark min-h-screen;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+@keyframes shine {
+  0% { opacity: 0; transform: translateX(-100%); }
+  60% { opacity: 0.5; }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+.animate-shine {
+  animation: shine 1.2s linear;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.4s ease;
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(40px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  transition: opacity 0.6s cubic-bezier(.4,0,.2,1), transform 0.6s cubic-bezier(.4,0,.2,1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: reveal 0.7s cubic-bezier(.4,0,.2,1);
+}
+
+.card-hover {
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s cubic-bezier(.4,0,.2,1), border-color 0.3s;
+  cursor: pointer;
+}
+.card-hover:hover {
+  transform: scale(1.045) rotateX(2deg) rotateY(-2deg);
+  box-shadow: 0 8px 32px 0 #FF174488, 0 1.5px 8px 0 #0008;
+  border-color: #FF1744;
+  z-index: 2;
+}
+
+input, textarea, select {
+  color: #1A1A1A !important;
+  background-color: #fff !important;
+}
+input:disabled, textarea:disabled {
+  background-color: #f3f4f6 !important;
+  color: #a1a1aa !important;
+}
+::placeholder {
+  color: #888 !important;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .max-w-6xl, .max-w-5xl, .max-w-3xl, .max-w-xl {
+    max-width: 98vw !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .rounded-2xl, .rounded-xl {
+    border-radius: 1rem !important;
+  }
+  .p-8, .p-10, .p-16 {
+    padding: 1.5rem !important;
+  }
+}
+.card-hover, .bg-dark\/80, .bg-primary\/80 {
+  box-shadow: 0 8px 32px 0 #FF174488, 0 1.5px 8px 0 #0008;
+  border-radius: 1.25rem;
+}
