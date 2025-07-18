@@ -1,21 +1,19 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
 const { body, validationResult } = require('express-validator');
 const session = require('express-session');
-const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Import models
-const Contact = require('./models/Contact');
-const Booking = require('./models/Booking');
+// Supabase client initialization
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
 // Security middleware
 app.use(helmet());
@@ -79,24 +77,34 @@ app.post('/api/contact', async (req, res) => {
         const { name, email, company, message } = req.body;
 
         // Create new contact
-        const contact = new Contact({
-            name,
-            email,
-            company: company || '',
-            message,
-            timestamp: new Date()
-        });
+        const { data, error } = await supabase
+            .from('contacts')
+            .insert([{
+                name,
+                email,
+                company: company || '',
+                message,
+                timestamp: new Date().toISOString()
+            }])
+            .select(); // Ensure inserted row is returned
 
-        await contact.save();
+        if (error || !data) {
+            console.error('Contact submission error:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Internal server error',
+                error: error
+            });
+        }
 
         res.status(201).json({
             success: true,
             message: 'Contact saved successfully',
             data: {
-                id: contact._id,
-                name: contact.name,
-                email: contact.email,
-                timestamp: contact.timestamp
+                id: data[0].id,
+                name: data[0].name,
+                email: data[0].email,
+                timestamp: data[0].timestamp
             }
         });
 
@@ -126,31 +134,40 @@ app.post('/api/booking', async (req, res) => {
         const { name, email, company, date, time, purpose } = req.body;
 
         // Create new booking
-        const booking = new Booking({
-            name,
-            email,
-            company: company || '',
-            date,
-            time,
-            purpose,
-            status: 'pending',
-            timestamp: new Date()
-        });
+        const { data, error } = await supabase
+            .from('bookings')
+            .insert([{
+                name,
+                email,
+                company: company || '',
+                date,
+                time,
+                purpose,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            }]);
 
-        await booking.save();
+        if (error) {
+            console.error('Booking submission error:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Internal server error',
+                error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+            });
+        }
 
         res.status(201).json({
             success: true,
             message: 'Booking saved successfully',
             data: {
-                id: booking._id,
-                name: booking.name,
-                email: booking.email,
-                date: booking.date,
-                time: booking.time,
-                purpose: booking.purpose,
-                status: booking.status,
-                timestamp: booking.timestamp
+                id: data[0].id,
+                name: name,
+                email: email,
+                date: date,
+                time: time,
+                purpose: purpose,
+                status: 'pending',
+                timestamp: data[0].timestamp
             }
         });
 
@@ -168,10 +185,15 @@ app.post('/api/booking', async (req, res) => {
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await User.findOne({ username });
-    if (!user) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('username', username);
+
+    if (error || !data || data.length === 0) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
+    const user = data[0];
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -202,8 +224,17 @@ function requireAdmin(req, res, next) {
 
 app.get('/api/admin/contacts', requireAdmin, async (req, res) => {
   try {
-    const contacts = await Contact.find().sort({ timestamp: -1 }).limit(100);
-    res.json({ success: true, data: contacts });
+    const { data, error } = await supabase
+      .from('contacts')
+      .select('*')
+      .order('timestamp', { ascending: false })
+      .limit(100);
+
+    if (error) {
+      console.error('Error fetching contacts:', error);
+      return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+    res.json({ success: true, data: data });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
@@ -211,8 +242,17 @@ app.get('/api/admin/contacts', requireAdmin, async (req, res) => {
 
 app.get('/api/admin/bookings', requireAdmin, async (req, res) => {
   try {
-    const bookings = await Booking.find().sort({ timestamp: -1 }).limit(100);
-    res.json({ success: true, data: bookings });
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .order('timestamp', { ascending: false })
+      .limit(100);
+
+    if (error) {
+      console.error('Error fetching bookings:', error);
+      return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+    res.json({ success: true, data: data });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
@@ -222,10 +262,15 @@ app.get('/api/admin/bookings', requireAdmin, async (req, res) => {
 app.post('/api/admin/change-password', requireAdmin, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   try {
-    const user = await User.findOne({ username: req.session.username });
-    if (!user) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('username', req.session.username);
+
+    if (error || !data || data.length === 0) {
       return res.status(401).json({ success: false, message: 'User not found' });
     }
+    const user = data[0];
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Current password is incorrect' });
@@ -233,8 +278,15 @@ app.post('/api/admin/change-password', requireAdmin, async (req, res) => {
     if (!newPassword || newPassword.length < 6) {
       return res.status(400).json({ success: false, message: 'New password must be at least 6 characters' });
     }
-    user.password = await bcrypt.hash(newPassword, 10);
-    await user.save();
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ password: await bcrypt.hash(newPassword, 10) })
+      .eq('username', req.session.username);
+
+    if (updateError) {
+      console.error('Error changing password:', updateError);
+      return res.status(500).json({ success: false, message: 'Server error' });
+    }
     res.json({ success: true, message: 'Password changed successfully' });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error' });
@@ -262,7 +314,7 @@ app.use('*', (req, res) => {
 // Start server
 const startServer = async () => {
     try {
-        await connectDB();
+        // await connectDB(); // REMOVED
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
             console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
@@ -273,19 +325,8 @@ const startServer = async () => {
     }
 };
 
-// MongoDB connection function
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected');
-  } catch (err) {
-    console.error('MongoDB connection error:', err);
-    throw err;
-  }
-};
+// REMOVED: const connectDB = async () => { ... }
+// REMOVED: await connectDB();
 
 startServer();
 

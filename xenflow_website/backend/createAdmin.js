@@ -1,6 +1,3 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const User = require('./models/User');
 require('dotenv').config();
 
 const readline = require('readline');
@@ -13,12 +10,6 @@ const rl = readline.createInterface({
 const ask = (q) => new Promise(res => rl.question(q, res));
 
 (async () => {
-  await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  console.log('Connected to MongoDB.');
-
   const username = await ask('Enter admin username: ');
   const password = await ask('Enter admin password: ');
   rl.close();
@@ -35,5 +26,4 @@ const ask = (q) => new Promise(res => rl.question(q, res));
       console.error('Error creating admin user:', err);
     }
   }
-  mongoose.disconnect();
 })(); 

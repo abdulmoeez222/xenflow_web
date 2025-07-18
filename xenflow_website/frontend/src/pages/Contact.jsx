@@ -16,7 +16,7 @@ function GridBG() {
 
 export default function Contact() {
   const [sectionRef, sectionRevealed] = useRevealOnScroll();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', company: '', message: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
@@ -37,7 +37,7 @@ export default function Contact() {
         body: JSON.stringify({
           name: form.name,
           email: form.email,
-          company: form.phone,
+          company: form.company, // Fix: send company, not phone
           message: form.message
         })
       });
@@ -86,8 +86,8 @@ export default function Contact() {
             </div>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
-                <label className="block mb-1 text-neutral-700 font-semibold">Phone <span className='text-xs text-neutral-400'>(optional)</span></label>
-                <input name="phone" value={form.phone} onChange={handleChange} className="w-full p-3 rounded border border-neutral-300 focus:ring-2 focus:ring-accent outline-none transition bg-white" type="tel" placeholder="e.g. +1 234 567 8901" />
+                <label className="block mb-1 text-neutral-700 font-semibold">Company <span className='text-xs text-neutral-400'>(optional)</span></label>
+                <input name="company" value={form.company} onChange={handleChange} className="w-full p-3 rounded border border-accent/40 focus:ring-2 focus:ring-accent outline-none transition" style={{background:'#ffe5ea', color:'#1A1A1A', fontSize:'1.1rem'}} placeholder="Your Company Name (optional)" />
               </div>
               <div className="flex-1"></div>
             </div>

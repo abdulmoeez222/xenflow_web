@@ -26,8 +26,7 @@
     "express-rate-limit": "^6.10.0",
     "express-session": "^1.18.1",
     "express-validator": "^7.0.1",
-    "helmet": "^7.0.0",
-    "mongoose": "^7.5.0"
+    "helmet": "^7.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
