@@ -141,13 +141,13 @@ app.post('/api/booking', async (req, res) => {
         const { data, error } = await supabase
             .from('bookings')
             .insert([{
-                name,
-                email,
-                company: company || '',
-                date,
-                time,
-                purpose,
-                status: 'pending',
+            name,
+            email,
+            company: company || '',
+            date,
+            time,
+            purpose,
+            status: 'pending',
                 timestamp: new Date().toISOString()
             }])
             .select();
