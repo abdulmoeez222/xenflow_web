@@ -19,7 +19,7 @@ export default function BookMeeting() {
     setSuccess(null);
     setError(null);
     try {
-      const res = await fetch('http://localhost:5000/api/booking', {
+      const res = await fetch('https://xenflow-backend.onrender.com/api/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)

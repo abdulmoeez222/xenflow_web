@@ -11,7 +11,7 @@ export default function AdminDashboard() {
 
   // Check admin session
   useEffect(() => {
-    fetch('http://localhost:5000/api/admin/session', { credentials: 'include' })
+    fetch('https://xenflow-backend.onrender.com/api/admin/session', { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         if (!data.loggedIn) navigate('/admin');
@@ -22,8 +22,8 @@ export default function AdminDashboard() {
     setLoading(true);
     setError(null);
     Promise.all([
-      fetch('http://localhost:5000/api/admin/contacts', { credentials: 'include' }).then(r => r.json()),
-      fetch('http://localhost:5000/api/admin/bookings', { credentials: 'include' }).then(r => r.json())
+      fetch('https://xenflow-backend.onrender.com/api/admin/contacts', { credentials: 'include' }).then(r => r.json()),
+      fetch('https://xenflow-backend.onrender.com/api/admin/bookings', { credentials: 'include' }).then(r => r.json())
     ])
       .then(([contactsRes, bookingsRes]) => {
         if (!contactsRes.success || !bookingsRes.success) throw new Error('Failed to fetch data');
@@ -35,7 +35,7 @@ export default function AdminDashboard() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch('http://localhost:5000/api/admin/logout', { method: 'POST', credentials: 'include' });
+    await fetch('https://xenflow-backend.onrender.com/api/admin/logout', { method: 'POST', credentials: 'include' });
     navigate('/admin');
   };
 

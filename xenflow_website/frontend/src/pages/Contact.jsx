@@ -31,7 +31,7 @@ export default function Contact() {
     setSuccess(null);
     setError(null);
     try {
-      const res = await fetch('http://localhost:5000/api/contact', {
+      const res = await fetch('https://xenflow-backend.onrender.com/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
