@@ -124,6 +124,7 @@ app.post('/api/contact', async (req, res) => {
 
 // Booking form endpoint
 app.post('/api/booking', async (req, res) => {
+    console.log('Booking request body:', req.body);
     try {
         // Check for validation errors
         const errors = validationResult(req);
@@ -136,21 +137,20 @@ app.post('/api/booking', async (req, res) => {
         }
 
         const { name, email, company, date, time, purpose } = req.body;
-
-        // Create new booking
         const { data, error } = await supabase
             .from('bookings')
             .insert([{
-            name,
-            email,
-            company: company || '',
-            date,
-            time,
-            purpose,
-            status: 'pending',
+                name,
+                email,
+                company: company || '',
+                date,
+                time,
+                purpose,
+                status: 'pending',
                 timestamp: new Date().toISOString()
-            }]);
-
+            }])
+            .select();
+        console.log('Supabase insert result:', { error, data });
         if (error || !data) {
             console.error('Booking submission error:', error, data);
             return res.status(500).json({
@@ -165,22 +165,22 @@ app.post('/api/booking', async (req, res) => {
             message: 'Booking saved successfully',
             data: {
                 id: data[0].id,
-                name: name,
-                email: email,
-                date: date,
-                time: time,
-                purpose: purpose,
+                name: data[0].name,
+                email: data[0].email,
+                date: data[0].date,
+                time: data[0].time,
+                purpose: data[0].purpose,
                 status: 'pending',
                 timestamp: data[0].timestamp
             }
         });
 
     } catch (error) {
-        console.error('Booking submission error:', error);
+        console.error('Booking submission error (catch):', error);
         res.status(500).json({
             success: false,
             message: 'Internal server error',
-            error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+            error: error.message || error
         });
     }
 });
