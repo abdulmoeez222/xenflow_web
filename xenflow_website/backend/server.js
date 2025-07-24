@@ -8,6 +8,7 @@ const session = require('express-session');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
+const nodemailer = require('nodemailer');
 
 const app = express();
 app.set('trust proxy', 1); // Trust first proxy (Render, Heroku, etc.)
@@ -157,6 +158,30 @@ app.post('/api/booking', async (req, res) => {
                 success: false,
                 message: 'Internal server error',
                 error: error
+            });
+        }
+
+        // Send email notification
+        if (data && data[0]) {
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.GMAIL_USER,
+                    pass: process.env.GMAIL_PASS
+                }
+            });
+            const mailOptions = {
+                from: process.env.GMAIL_USER,
+                to: process.env.GMAIL_USER, // Change to your desired recipient
+                subject: 'New Booking Received',
+                text: `New booking from ${data[0].name} (${data[0].email})\nDate: ${data[0].date}\nTime: ${data[0].time}\nPurpose: ${data[0].purpose}\nCompany: ${data[0].company}`
+            };
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.error('Error sending booking email:', err);
+                } else {
+                    console.log('Booking email sent:', info.response);
+                }
             });
         }
 
