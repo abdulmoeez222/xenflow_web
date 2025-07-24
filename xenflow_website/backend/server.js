@@ -83,10 +83,10 @@ app.post('/api/contact', async (req, res) => {
         const { data, error } = await supabase
             .from('contacts')
             .insert([{
-                name,
-                email,
-                company: company || '',
-                message,
+            name,
+            email,
+            company: company || '',
+            message,
                 timestamp: new Date().toISOString()
             }])
             .select(); // Ensure inserted row is returned
@@ -140,13 +140,13 @@ app.post('/api/booking', async (req, res) => {
         const { data, error } = await supabase
             .from('bookings')
             .insert([{
-                name,
-                email,
-                company: company || '',
-                date,
-                time,
-                purpose,
-                status: 'pending',
+            name,
+            email,
+            company: company || '',
+            date,
+            time,
+            purpose,
+            status: 'pending',
                 timestamp: new Date().toISOString()
             }]);
 
