@@ -29,7 +29,10 @@ app.use('/api/', limiter);
 
 // CORS configuration
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: [
+        'https://xenflow-web.vercel.app', // Vercel frontend
+        'http://localhost:5173'           // Local dev
+    ],
     credentials: true
 }));
 
