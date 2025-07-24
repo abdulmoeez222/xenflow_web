@@ -151,12 +151,12 @@ app.post('/api/booking', async (req, res) => {
                 timestamp: new Date().toISOString()
             }]);
 
-        if (error) {
-            console.error('Booking submission error:', error);
+        if (error || !data) {
+            console.error('Booking submission error:', error, data);
             return res.status(500).json({
                 success: false,
                 message: 'Internal server error',
-                error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+                error: error
             });
         }
 
