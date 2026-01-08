@@ -15,7 +15,17 @@ app.set('trust proxy', 1); // Trust first proxy (Render, Heroku, etc.)
 const PORT = process.env.PORT || 5000;
 
 // Supabase client initialization
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+let supabase;
+try {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+    console.warn('⚠️  Supabase environment variables not set. Contact form will not work.');
+  } else {
+    supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+    console.log('✅ Supabase client initialized');
+  }
+} catch (error) {
+  console.error('❌ Failed to initialize Supabase:', error);
+}
 
 // Security middleware
 app.use(helmet());
@@ -66,62 +76,119 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Contact form endpoint
-app.post('/api/contact', async (req, res) => {
+// Contact form endpoint with proper validation
+app.post('/api/contact', 
+  // Validation middleware
+  [
+    body('name')
+      .trim()
+      .notEmpty()
+      .withMessage('Name is required')
+      .isLength({ min: 2, max: 100 })
+      .withMessage('Name must be between 2 and 100 characters')
+      .escape(),
+    body('email')
+      .trim()
+      .notEmpty()
+      .withMessage('Email is required')
+      .isEmail()
+      .withMessage('Please provide a valid email address')
+      .normalizeEmail(),
+    body('company')
+      .optional({ checkFalsy: true })
+      .trim()
+      .isLength({ max: 100 })
+      .withMessage('Company name cannot exceed 100 characters')
+      .escape(),
+    body('message')
+      .trim()
+      .notEmpty()
+      .withMessage('Message is required')
+      .isLength({ min: 10, max: 1000 })
+      .withMessage('Message must be between 10 and 1000 characters')
+      .escape()
+  ],
+  async (req, res) => {
     try {
-        // Check for validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Validation failed',
-                errors: errors.array() 
-            });
-        }
-
-        const { name, email, company, message } = req.body;
-
-        // Create new contact
-        const { data, error } = await supabase
-            .from('contacts')
-            .insert([{
-            name,
-            email,
-            company: company || '',
-            message,
-                timestamp: new Date().toISOString()
-            }])
-            .select(); // Ensure inserted row is returned
-
-        if (error || !data) {
-            console.error('Contact submission error:', error);
-            return res.status(500).json({
-                success: false,
-                message: 'Internal server error',
-                error: error
-            });
-        }
-
-        res.status(201).json({
-            success: true,
-            message: 'Contact saved successfully',
-            data: {
-                id: data[0].id,
-                name: data[0].name,
-                email: data[0].email,
-                timestamp: data[0].timestamp
-            }
+      // Check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Validation failed',
+          errors: errors.array() 
         });
+      }
+
+      const { name, email, company, message } = req.body;
+
+      // Validate Supabase is configured
+      if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+        console.error('❌ Supabase configuration missing');
+        return res.status(500).json({
+          success: false,
+          message: 'Server configuration error - Supabase not configured'
+        });
+      }
+
+      if (!supabase) {
+        console.error('❌ Supabase client not initialized');
+        return res.status(500).json({
+          success: false,
+          message: 'Server configuration error - Supabase client not initialized'
+        });
+      }
+
+      // Create new contact
+      const { data, error } = await supabase
+        .from('contacts')
+        .insert([{
+          name,
+          email,
+          company: company || null,
+          message,
+          timestamp: new Date().toISOString()
+        }])
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to save contact',
+          error: process.env.NODE_ENV === 'development' ? error.message : 'Database error'
+        });
+      }
+
+      if (!data || data.length === 0) {
+        console.error('No data returned from Supabase');
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to save contact - no data returned'
+        });
+      }
+
+      res.status(201).json({
+        success: true,
+        message: 'Contact saved successfully',
+        data: {
+          id: data[0].id,
+          name: data[0].name,
+          email: data[0].email,
+          timestamp: data[0].timestamp
+        }
+      });
 
     } catch (error) {
-        console.error('Contact submission error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
-        });
+      console.error('Contact submission error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+      });
     }
-});
+  }
+);
 
 // Booking form endpoint
 app.post('/api/booking', async (req, res) => {

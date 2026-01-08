@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import useRevealOnScroll from '../hooks/useRevealOnScroll';
-
-function GridBG() {
-  return (
-    <svg className="absolute inset-0 w-full h-full" style={{zIndex:0}} width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-          <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#e5e7eb" strokeWidth="1" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#grid)" />
-    </svg>
-  );
-}
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 
 export default function Contact() {
-  const [sectionRef, sectionRevealed] = useRevealOnScroll();
+  const [heroRef, heroRevealed] = useRevealOnScroll();
+  const [formRef, formRevealed] = useRevealOnScroll();
   const [form, setForm] = useState({ name: '', email: '', company: '', message: '' });
+  const [focused, setFocused] = useState({ name: false, email: false, company: false, message: false });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    if (error) setError(null);
+  };
+
+  const handleFocus = (field) => {
+    setFocused({ ...focused, [field]: true });
+  };
+
+  const handleBlur = (field) => {
+    setFocused({ ...focused, [field]: false });
   };
 
   const handleSubmit = async e => {
@@ -37,72 +36,228 @@ export default function Contact() {
         body: JSON.stringify({
           name: form.name,
           email: form.email,
-          company: form.company, // Fix: send company, not phone
+          company: form.company,
           message: form.message
         })
       });
       const data = await res.json();
       if (res.ok) {
-        setSuccess('Thank you! We received your message.');
-        setForm({ name: '', email: '', phone: '', message: '' });
+        setSuccess('Thank you! We received your message. Our team will get back to you within 24 hours.');
+        setForm({ name: '', email: '', company: '', message: '' });
+        setFocused({ name: false, email: false, company: false, message: false });
       } else {
-        setError(data.message || 'Something went wrong.');
+        setError(data.message || 'Something went wrong. Please try again.');
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  const contactInfo = [
+    { icon: <FaEnvelope />, label: 'Email', value: 'xenflowtech@gmail.com', href: 'mailto:xenflowtech@gmail.com' },
+    { icon: <FaPhone />, label: 'Phone', value: '+92 328 455 7709', href: 'tel:+923284557709' },
+    { icon: <FaMapMarkerAlt />, label: 'Location', value: 'Lahore, Pakistan', href: null },
+    { icon: <FaClock />, label: 'Response Time', value: 'Within 24 hours', href: null },
+  ];
+
   return (
-    <section ref={sectionRef} className={`min-h-screen flex flex-col items-center justify-center px-4 py-16 bg-white overflow-hidden relative reveal${sectionRevealed ? ' revealed' : ''}`}
-      style={{zIndex:1}}>
-      {/* Grid background behind everything */}
-      <div className="absolute inset-0 w-full h-full" style={{zIndex:0}}><GridBG /></div>
-      <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col md:flex-row gap-0 md:gap-12 items-stretch justify-center">
-        {/* Left: Heading and description */}
-        <div className="flex-[1.2] flex flex-col justify-center bg-[#d7263d] rounded-l-2xl md:rounded-2xl shadow-xl border border-accent/20 p-10 md:p-16 min-h-[420px]" style={{background:'#d7263d'}}>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-            Let's talk about<br />
-            <span className="text-accent" style={{color:'#fff'}}>AI for Business</span>
+    <div className="min-h-screen">
+      {/* Hero Section - Premium */}
+      <section ref={heroRef} className={`relative flex flex-col items-center justify-center min-h-[20vh] sm:min-h-[25vh] w-full bg-gradient-to-br from-neutral-950 via-primary to-neutral-900 overflow-hidden reveal${heroRevealed ? ' revealed' : ''}`}>
+        {/* Animated background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-transparent to-accent2/10 animate-pulse"></div>
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(circle at 20% 50%, rgba(177, 0, 30, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(215, 38, 61, 0.15) 0%, transparent 50%)'
+        }}></div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 text-center py-8 sm:py-10 md:py-12">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight">
+            <span className="bg-gradient-to-r from-accent to-accent2 bg-clip-text text-transparent">
+              Let's Build Something Extraordinary Together
+            </span>
           </h1>
-          <p className="text-lg text-white mb-4">Got a burning AI idea, question, or just want to chat about what we do?</p>
-          <p className="text-lg text-white mb-4">Reach out, and our friendly team at XenFlowTech will be right there to guide, assist, or simply share in your excitement.</p>
-          <p className="text-lg text-white">Let's make your AI journey memorable!</p>
         </div>
-        {/* Right: Form and privacy note as a single card */}
-        <div className="flex-1 flex flex-col justify-center bg-white rounded-r-2xl md:rounded-2xl shadow-xl border border-accent/20 p-10 md:p-16 min-h-[420px]">
-          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block mb-1 text-neutral-700 font-semibold">Name</label>
-                <input name="name" value={form.name} onChange={handleChange} className="w-full p-3 rounded border border-neutral-300 focus:ring-2 focus:ring-accent outline-none transition bg-white" type="text" placeholder="Enter your full name" required />
-              </div>
-              <div className="flex-1">
-                <label className="block mb-1 text-neutral-700 font-semibold">Email</label>
-                <input name="email" value={form.email} onChange={handleChange} className="w-full p-3 rounded border border-neutral-300 focus:ring-2 focus:ring-accent outline-none transition bg-white" type="email" placeholder="you@email.com" required />
+      </section>
+
+      {/* Contact Section - Premium Form */}
+      <section ref={formRef} className={`w-full py-16 sm:py-24 md:py-32 relative overflow-hidden reveal${formRevealed ? ' revealed' : ''}`}>
+        {/* Premium Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-primary to-neutral-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(circle at 30% 50%, rgba(177, 0, 30, 0.15) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(215, 38, 61, 0.15) 0%, transparent 50%)'
+        }}></div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+            {/* Left: Contact Information */}
+            <div className="lg:col-span-1 space-y-6">
+              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-6">
+                  Get in Touch
+                </h2>
+                <p className="text-light/70 mb-6 text-sm sm:text-base leading-relaxed">
+                  Have a project in mind? Want to learn more about our services? We're here to help you every step of the way.
+                </p>
+                
+                <div className="space-y-4">
+                  {contactInfo.map((info, index) => (
+                    <div key={index} className="flex items-start gap-4 group">
+                      <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center text-accent group-hover:bg-accent/30 transition-all duration-300 flex-shrink-0">
+                        <div className="text-lg">{info.icon}</div>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-light/60 uppercase tracking-wider mb-1">{info.label}</p>
+                        {info.href ? (
+                          <a href={info.href} className="text-white hover:text-accent transition-colors text-sm sm:text-base font-medium">
+                            {info.value}
+                          </a>
+                        ) : (
+                          <p className="text-white text-sm sm:text-base font-medium">{info.value}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block mb-1 text-neutral-700 font-semibold">Company <span className='text-xs text-neutral-400'>(optional)</span></label>
-                <input name="company" value={form.company} onChange={handleChange} className="w-full p-3 rounded border border-accent/40 focus:ring-2 focus:ring-accent outline-none transition" style={{background:'#ffe5ea', color:'#1A1A1A', fontSize:'1.1rem'}} placeholder="Your Company Name (optional)" />
+
+            {/* Right: Contact Form */}
+            <div className="lg:col-span-2">
+              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-white/10 shadow-2xl">
+                <div className="mb-6">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+                    Send Us a Message
+                  </h2>
+                  <p className="text-light/70 text-sm sm:text-base">
+                    Fill out the form below and we'll get back to you as soon as possible.
+                  </p>
+                </div>
+
+                <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
+                  {/* Name and Email Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                    <div className="relative">
+                      <label className="block text-sm font-semibold text-light/80 mb-2">
+                        Full Name <span className="text-accent">*</span>
+                      </label>
+                      <input
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        onFocus={() => handleFocus('name')}
+                        onBlur={() => handleBlur('name')}
+                        className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
+                          focused.name ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                        }`}
+                        type="text"
+                        placeholder="John Doe"
+                        required
+                      />
+                    </div>
+                    <div className="relative">
+                      <label className="block text-sm font-semibold text-light/80 mb-2">
+                        Email Address <span className="text-accent">*</span>
+                      </label>
+                      <input
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        onFocus={() => handleFocus('email')}
+                        onBlur={() => handleBlur('email')}
+                        className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
+                          focused.email ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                        }`}
+                        type="email"
+                        placeholder="john@company.com"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Company */}
+                  <div className="relative">
+                    <label className="block text-sm font-semibold text-light/80 mb-2">
+                      Company Name <span className="text-light/50 text-xs">(Optional)</span>
+                    </label>
+                    <input
+                      name="company"
+                      value={form.company}
+                      onChange={handleChange}
+                      onFocus={() => handleFocus('company')}
+                      onBlur={() => handleBlur('company')}
+                      className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
+                        focused.company ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                      }`}
+                      type="text"
+                      placeholder="Your Company"
+                    />
+                  </div>
+
+                  {/* Message */}
+                  <div className="relative">
+                    <label className="block text-sm font-semibold text-light/80 mb-2">
+                      How can we help you? <span className="text-accent">*</span>
+                    </label>
+                    <textarea
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
+                      onFocus={() => handleFocus('message')}
+                      onBlur={() => handleBlur('message')}
+                      className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 resize-none ${
+                        focused.message ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                      }`}
+                      placeholder="Tell us about your project, goals, or questions..."
+                      rows="5"
+                      required
+                    />
+                    <p className="text-xs text-light/50 mt-2">
+                      Please provide as much detail as possible for a faster and more accurate response.
+                    </p>
+                  </div>
+
+                  {/* Success/Error Messages */}
+                  {success && (
+                    <div className="flex items-center gap-3 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400">
+                      <FaCheckCircle className="text-lg flex-shrink-0" />
+                      <p className="text-sm font-medium">{success}</p>
+                    </div>
+                  )}
+                  {error && (
+                    <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400">
+                      <FaExclamationCircle className="text-lg flex-shrink-0" />
+                      <p className="text-sm font-medium">{error}</p>
+                    </div>
+                  )}
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full animated-border mt-2 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity"
+                  >
+                    <span className="animated-border-content block text-white font-bold text-base sm:text-lg py-3.5 sm:py-4">
+                      {loading ? 'Sending...' : 'Send Message'}
+                    </span>
+                  </button>
+
+                  {/* Privacy Note */}
+                  <p className="text-xs text-light/50 text-center mt-4">
+                    Your information is encrypted and kept strictly confidential. We never share your data with third parties.{' '}
+                    <a href="/privacy" className="text-accent hover:text-accent2 underline transition-colors">
+                      Learn more
+                    </a>
+                    .
+                  </p>
+                </form>
               </div>
-              <div className="flex-1"></div>
             </div>
-            <div>
-              <label className="block mb-1 text-neutral-700 font-semibold">How can we help you?</label>
-              <textarea name="message" value={form.message} onChange={handleChange} className="w-full p-3 rounded border border-accent/40 focus:ring-2 focus:ring-accent outline-none transition" style={{background:'#ffe5ea', color:'#1A1A1A', minHeight:'120px', fontSize:'1.1rem'}} placeholder="Describe your project, question, or idea..." required />
-              <div className="text-xs text-neutral-400 mt-1">Please provide as much detail as possible for a faster response.</div>
-            </div>
-            <button type="submit" className="w-full bg-accent hover:bg-accent2 text-white font-bold py-4 rounded-full text-lg shadow-none transition-all mt-2" disabled={loading}>{loading ? 'Sending...' : 'Send'}</button>
-            {success && <div className="text-green-600 font-semibold text-center mt-2">{success}</div>}
-            {error && <div className="text-red-600 font-semibold text-center mt-2">{error}</div>}
-          </form>
-          <div className="text-xs text-neutral-400 mt-4 text-center max-w-md mx-auto">Your information is encrypted and kept strictly confidential. We never share your data with third parties. <a href="/privacy" className="underline text-accent">Learn more</a>.</div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 } 

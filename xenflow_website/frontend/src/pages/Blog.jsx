@@ -25,8 +25,9 @@ const posts = [
 export default function Blog() {
   const [sectionRef, sectionRevealed] = useRevealOnScroll();
   return (
-    <section ref={sectionRef} className={`max-w-3xl mx-auto py-16 px-4 reveal${sectionRevealed ? ' revealed' : ''}`}> 
-      <h2 className="text-4xl font-extrabold text-accent mb-10 text-center drop-shadow-xl font-poppins">AI Automation Blog</h2>
+    <section ref={sectionRef} className={`min-h-screen bg-gradient-to-br from-neutral-950 via-primary to-neutral-900 flex flex-col items-center py-16 px-4 reveal${sectionRevealed ? ' revealed' : ''}`}> 
+      <div className="max-w-3xl w-full mx-auto">
+      <h2 className="text-4xl font-extrabold text-white mb-10 text-center drop-shadow-xl font-poppins">AI Automation Blog</h2>
       <div className="space-y-8">
         {posts.map((post, i) => {
           const [cardRef, cardRevealed] = useRevealOnScroll();
@@ -47,6 +48,7 @@ export default function Blog() {
             </a>
           );
         })}
+      </div>
       </div>
     </section>
   );
