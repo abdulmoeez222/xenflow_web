@@ -1,58 +1,97 @@
 import React, { useState } from 'react';
 import useRevealOnScroll from '../hooks/useRevealOnScroll';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock, FaCheckCircle, FaExclamationCircle, FaCalendarAlt } from 'react-icons/fa';
 
 export default function Contact() {
   const [heroRef, heroRevealed] = useRevealOnScroll();
-  const [formRef, formRevealed] = useRevealOnScroll();
-  const [form, setForm] = useState({ name: '', email: '', company: '', message: '' });
-  const [focused, setFocused] = useState({ name: false, email: false, company: false, message: false });
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(null);
-  const [error, setError] = useState(null);
+  const [bookingRef, bookingRevealed] = useRevealOnScroll();
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    if (error) setError(null);
+  // Booking form state
+  const [bookingForm, setBookingForm] = useState({ 
+    name: '', 
+    email: '', 
+    company: '', 
+    date: '', 
+    time: '', 
+    message: '' 
+  });
+  const [bookingFocused, setBookingFocused] = useState({ 
+    name: false, 
+    email: false, 
+    company: false, 
+    date: false, 
+    time: false, 
+    message: false 
+  });
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(null);
+  const [bookingError, setBookingError] = useState(null);
+
+  const handleBookingChange = e => {
+    setBookingForm({ ...bookingForm, [e.target.name]: e.target.value });
+    if (bookingError) setBookingError(null);
   };
 
-  const handleFocus = (field) => {
-    setFocused({ ...focused, [field]: true });
+  const handleBookingFocus = (field) => {
+    setBookingFocused({ ...bookingFocused, [field]: true });
   };
 
-  const handleBlur = (field) => {
-    setFocused({ ...focused, [field]: false });
+  const handleBookingBlur = (field) => {
+    setBookingFocused({ ...bookingFocused, [field]: false });
   };
 
-  const handleSubmit = async e => {
+  const handleBookingSubmit = async e => {
     e.preventDefault();
-    setLoading(true);
-    setSuccess(null);
-    setError(null);
+    setBookingLoading(true);
+    setBookingSuccess(null);
+    setBookingError(null);
+    
     try {
-      const res = await fetch('https://xenflow-backend.onrender.com/api/contact', {
+      const API_URL = import.meta.env.VITE_API_URL || 
+        (import.meta.env.DEV ? 'http://localhost:5000' : 'https://xenflow-backend.onrender.com');
+      
+      const res = await fetch(`${API_URL}/api/booking`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          company: form.company,
-          message: form.message
+          name: bookingForm.name,
+          email: bookingForm.email,
+          company: bookingForm.company,
+          date: bookingForm.date,
+          time: bookingForm.time,
+          message: bookingForm.message
         })
       });
+      
       const data = await res.json();
-      if (res.ok) {
-        setSuccess('Thank you! We received your message. Our team will get back to you within 24 hours.');
-        setForm({ name: '', email: '', company: '', message: '' });
-        setFocused({ name: false, email: false, company: false, message: false });
+      
+      if (res.ok && data.success) {
+        setBookingSuccess(data.message || 'Meeting booking submitted successfully! We\'ll confirm via email shortly.');
+        setBookingForm({ name: '', email: '', company: '', date: '', time: '', message: '' });
+        setBookingFocused({ name: false, email: false, company: false, date: false, time: false, message: false });
       } else {
-        setError(data.message || 'Something went wrong. Please try again.');
+        setBookingError(data.message || data.errors?.[0]?.msg || 'Something went wrong. Please try again.');
       }
     } catch (err) {
-      setError('Network error. Please check your connection and try again.');
+      console.error('Booking error:', err);
+      setBookingError('Network error. Please check your connection and try again.');
     } finally {
-      setLoading(false);
+      setBookingLoading(false);
     }
+  };
+
+  // Get minimum date (tomorrow)
+  const getMinDate = () => {
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
+    return today.toISOString().split('T')[0];
+  };
+
+  // Get maximum date (3 months from now)
+  const getMaxDate = () => {
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    return maxDate.toISOString().split('T')[0];
   };
 
   const contactInfo = [
@@ -64,9 +103,8 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Premium */}
+      {/* Hero Section */}
       <section ref={heroRef} className={`relative flex flex-col items-center justify-center min-h-[20vh] sm:min-h-[25vh] w-full bg-gradient-to-br from-neutral-950 via-primary to-neutral-900 overflow-hidden reveal${heroRevealed ? ' revealed' : ''}`}>
-        {/* Animated background gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-transparent to-accent2/10 animate-pulse"></div>
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(circle at 20% 50%, rgba(177, 0, 30, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(215, 38, 61, 0.15) 0%, transparent 50%)'
@@ -81,9 +119,8 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Contact Section - Premium Form */}
-      <section ref={formRef} className={`w-full py-16 sm:py-24 md:py-32 relative overflow-hidden reveal${formRevealed ? ' revealed' : ''}`}>
-        {/* Premium Gradient Background */}
+      {/* Booking Section - Main Form */}
+      <section ref={bookingRef} className={`w-full py-16 sm:py-24 md:py-32 relative overflow-hidden reveal${bookingRevealed ? ' revealed' : ''}`}>
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-primary to-neutral-900"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
         <div className="absolute inset-0" style={{
@@ -99,7 +136,7 @@ export default function Contact() {
                   Get in Touch
                 </h2>
                 <p className="text-light/70 mb-6 text-sm sm:text-base leading-relaxed">
-                  Have a project in mind? Want to learn more about our services? We're here to help you every step of the way.
+                  Schedule a consultation call with our team. Choose a date and time that works for you, and we'll confirm via email.
                 </p>
                 
                 <div className="space-y-4">
@@ -124,19 +161,19 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Right: Contact Form */}
+            {/* Right: Booking Form */}
             <div className="lg:col-span-2">
               <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-white/10 shadow-2xl">
                 <div className="mb-6">
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
-                    Send Us a Message
+                    Book a Meeting
                   </h2>
                   <p className="text-light/70 text-sm sm:text-base">
-                    Fill out the form below and we'll get back to you as soon as possible.
+                    Fill out the form below to schedule a consultation call. We'll confirm your meeting via email.
                   </p>
                 </div>
 
-                <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-5 sm:space-y-6" onSubmit={handleBookingSubmit}>
                   {/* Name and Email Row */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <div className="relative">
@@ -145,12 +182,12 @@ export default function Contact() {
                       </label>
                       <input
                         name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        onFocus={() => handleFocus('name')}
-                        onBlur={() => handleBlur('name')}
+                        value={bookingForm.name}
+                        onChange={handleBookingChange}
+                        onFocus={() => handleBookingFocus('name')}
+                        onBlur={() => handleBookingBlur('name')}
                         className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
-                          focused.name ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                          bookingFocused.name ? 'border-accent/50 bg-white/10' : 'border-white/20'
                         }`}
                         type="text"
                         placeholder="John Doe"
@@ -163,12 +200,12 @@ export default function Contact() {
                       </label>
                       <input
                         name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        onFocus={() => handleFocus('email')}
-                        onBlur={() => handleBlur('email')}
+                        value={bookingForm.email}
+                        onChange={handleBookingChange}
+                        onFocus={() => handleBookingFocus('email')}
+                        onBlur={() => handleBookingBlur('email')}
                         className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
-                          focused.email ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                          bookingFocused.email ? 'border-accent/50 bg-white/10' : 'border-white/20'
                         }`}
                         type="email"
                         placeholder="john@company.com"
@@ -184,73 +221,115 @@ export default function Contact() {
                     </label>
                     <input
                       name="company"
-                      value={form.company}
-                      onChange={handleChange}
-                      onFocus={() => handleFocus('company')}
-                      onBlur={() => handleBlur('company')}
+                      value={bookingForm.company}
+                      onChange={handleBookingChange}
+                      onFocus={() => handleBookingFocus('company')}
+                      onBlur={() => handleBookingBlur('company')}
                       className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
-                        focused.company ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                        bookingFocused.company ? 'border-accent/50 bg-white/10' : 'border-white/20'
                       }`}
                       type="text"
                       placeholder="Your Company"
                     />
                   </div>
 
+                  {/* Date and Time Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                    <div className="relative">
+                      <label className="block text-sm font-semibold text-light/80 mb-2">
+                        <FaCalendarAlt className="inline mr-2" />
+                        Meeting Date <span className="text-accent">*</span>
+                      </label>
+                      <input
+                        name="date"
+                        value={bookingForm.date}
+                        onChange={handleBookingChange}
+                        onFocus={() => handleBookingFocus('date')}
+                        onBlur={() => handleBookingBlur('date')}
+                        className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
+                          bookingFocused.date ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                        }`}
+                        type="date"
+                        min={getMinDate()}
+                        max={getMaxDate()}
+                        required
+                      />
+                      <p className="text-xs text-light/50 mt-1">
+                        Available up to 3 months ahead
+                      </p>
+                    </div>
+                    <div className="relative">
+                      <label className="block text-sm font-semibold text-light/80 mb-2">
+                        <FaClock className="inline mr-2" />
+                        Meeting Time <span className="text-accent">*</span>
+                      </label>
+                      <input
+                        name="time"
+                        value={bookingForm.time}
+                        onChange={handleBookingChange}
+                        onFocus={() => handleBookingFocus('time')}
+                        onBlur={() => handleBookingBlur('time')}
+                        className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 ${
+                          bookingFocused.time ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                        }`}
+                        type="time"
+                        min="09:00"
+                        max="18:00"
+                        required
+                      />
+                      <p className="text-xs text-light/50 mt-1">
+                        Business hours: 9:00 AM - 6:00 PM
+                      </p>
+                    </div>
+                  </div>
+
                   {/* Message */}
                   <div className="relative">
                     <label className="block text-sm font-semibold text-light/80 mb-2">
-                      How can we help you? <span className="text-accent">*</span>
+                      What would you like to discuss? <span className="text-light/50 text-xs">(Optional)</span>
                     </label>
                     <textarea
                       name="message"
-                      value={form.message}
-                      onChange={handleChange}
-                      onFocus={() => handleFocus('message')}
-                      onBlur={() => handleBlur('message')}
+                      value={bookingForm.message}
+                      onChange={handleBookingChange}
+                      onFocus={() => handleBookingFocus('message')}
+                      onBlur={() => handleBookingBlur('message')}
                       className={`w-full px-4 py-3.5 rounded-xl border-2 bg-white/5 backdrop-blur-sm text-white placeholder:text-light/40 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all duration-300 resize-none ${
-                        focused.message ? 'border-accent/50 bg-white/10' : 'border-white/20'
+                        bookingFocused.message ? 'border-accent/50 bg-white/10' : 'border-white/20'
                       }`}
-                      placeholder="Tell us about your project, goals, or questions..."
-                      rows="5"
-                      required
+                      placeholder="Tell us about your project, goals, or what you'd like to discuss..."
+                      rows="4"
                     />
-                    <p className="text-xs text-light/50 mt-2">
-                      Please provide as much detail as possible for a faster and more accurate response.
-                    </p>
                   </div>
 
                   {/* Success/Error Messages */}
-                  {success && (
+                  {bookingSuccess && (
                     <div className="flex items-center gap-3 p-4 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400">
                       <FaCheckCircle className="text-lg flex-shrink-0" />
-                      <p className="text-sm font-medium">{success}</p>
+                      <p className="text-sm font-medium">{bookingSuccess}</p>
                     </div>
                   )}
-                  {error && (
+                  {bookingError && (
                     <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400">
                       <FaExclamationCircle className="text-lg flex-shrink-0" />
-                      <p className="text-sm font-medium">{error}</p>
+                      <p className="text-sm font-medium">{bookingError}</p>
                     </div>
                   )}
 
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={bookingLoading}
                     className="w-full animated-border mt-2 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity"
                   >
                     <span className="animated-border-content block text-white font-bold text-base sm:text-lg py-3.5 sm:py-4">
-                      {loading ? 'Sending...' : 'Send Message'}
+                      {bookingLoading ? 'Scheduling...' : 'Book Meeting'}
                     </span>
                   </button>
 
                   {/* Privacy Note */}
                   <p className="text-xs text-light/50 text-center mt-4">
-                    Your information is encrypted and kept strictly confidential. We never share your data with third parties.{' '}
-                    <a href="/privacy" className="text-accent hover:text-accent2 underline transition-colors">
-                      Learn more
-                    </a>
-                    .
+                    We'll send you a confirmation email with meeting details. Your information is kept confidential.
                   </p>
                 </form>
               </div>
@@ -260,4 +339,4 @@ export default function Contact() {
       </section>
     </div>
   );
-} 
+}

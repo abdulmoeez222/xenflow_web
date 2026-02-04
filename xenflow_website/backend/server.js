@@ -43,9 +43,13 @@ app.use('/api/', limiter);
 app.use(cors({
     origin: [
         'https://xenflow-web.vercel.app', // Vercel frontend
-        'http://localhost:5173'           // Local dev
+        'http://localhost:5173',          // Local dev (Vite default)
+        'http://localhost:5174',          // Local dev (alternative port)
+        /^http:\/\/localhost:\d+$/        // Allow any localhost port for dev
     ],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Body parsing middleware
@@ -75,6 +79,10 @@ app.get('/api/health', (req, res) => {
         timestamp: new Date().toISOString()
     });
 });
+
+// Chatbot routes
+const chatRoutes = require('./routes/chat');
+app.use('/api', chatRoutes);
 
 // Contact form endpoint with proper validation
 app.post('/api/contact', 
@@ -190,92 +198,208 @@ app.post('/api/contact',
   }
 );
 
-// Booking form endpoint
-app.post('/api/booking', async (req, res) => {
-    console.log('Booking request body:', req.body);
+// Booking form endpoint with comprehensive validation and email
+app.post('/api/booking',
+  [
+    body('name')
+      .trim()
+      .notEmpty()
+      .withMessage('Name is required')
+      .isLength({ min: 2, max: 100 })
+      .withMessage('Name must be between 2 and 100 characters')
+      .escape(),
+    body('email')
+      .trim()
+      .notEmpty()
+      .withMessage('Email is required')
+      .isEmail()
+      .withMessage('Please provide a valid email address')
+      .normalizeEmail(),
+    body('company')
+      .optional({ checkFalsy: true })
+      .trim()
+      .isLength({ max: 100 })
+      .withMessage('Company name cannot exceed 100 characters')
+      .escape(),
+    body('date')
+      .trim()
+      .notEmpty()
+      .withMessage('Date is required')
+      .isISO8601()
+      .withMessage('Please provide a valid date'),
+    body('time')
+      .trim()
+      .notEmpty()
+      .withMessage('Time is required')
+      .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+      .withMessage('Please provide a valid time (HH:MM format)'),
+    body('message')
+      .optional({ checkFalsy: true })
+      .trim()
+      .isLength({ max: 1000 })
+      .withMessage('Message cannot exceed 1000 characters')
+      .escape()
+  ],
+  async (req, res) => {
     try {
-        // Check for validation errors
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Validation failed',
-                errors: errors.array() 
-            });
-        }
-
-        const { name, email, company, date, time, purpose } = req.body;
-        const { data, error } = await supabase
-            .from('bookings')
-            .insert([{
-            name,
-            email,
-            company: company || '',
-            date,
-            time,
-            purpose,
-            status: 'pending',
-                timestamp: new Date().toISOString()
-            }])
-            .select();
-        console.log('Supabase insert result:', { error, data });
-        if (error || !data) {
-            console.error('Booking submission error:', error, data);
-            return res.status(500).json({
-                success: false,
-                message: 'Internal server error',
-                error: error
-            });
-        }
-
-        // Send email notification
-        if (data && data[0]) {
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.GMAIL_USER,
-                    pass: process.env.GMAIL_PASS
-                }
-            });
-            const mailOptions = {
-                from: process.env.GMAIL_USER,
-                to: process.env.GMAIL_USER, // Change to your desired recipient
-                subject: 'New Booking Received',
-                text: `New booking from ${data[0].name} (${data[0].email})\nDate: ${data[0].date}\nTime: ${data[0].time}\nPurpose: ${data[0].purpose}\nCompany: ${data[0].company}`
-            };
-            transporter.sendMail(mailOptions, (err, info) => {
-                if (err) {
-                    console.error('Error sending booking email:', err);
-                } else {
-                    console.log('Booking email sent:', info.response);
-                }
-            });
-        }
-
-        res.status(201).json({
-            success: true,
-            message: 'Booking saved successfully',
-            data: {
-                id: data[0].id,
-                name: data[0].name,
-                email: data[0].email,
-                date: data[0].date,
-                time: data[0].time,
-                purpose: data[0].purpose,
-                status: 'pending',
-                timestamp: data[0].timestamp
-            }
+      // Check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Validation failed',
+          errors: errors.array() 
         });
+      }
+
+      const { name, email, company, date, time, message } = req.body;
+      
+      // Format date for display
+      const bookingDate = new Date(date);
+      const formattedDate = bookingDate.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      const { data, error } = await supabase
+        .from('bookings')
+        .insert([{
+          name,
+          email,
+          company: company || '',
+          date,
+          time,
+          purpose: message || '',
+          status: 'pending',
+          timestamp: new Date().toISOString()
+        }])
+        .select();
+
+      if (error || !data) {
+        console.error('Booking submission error:', error, data);
+        return res.status(500).json({
+          success: false,
+          message: 'Internal server error',
+          error: error?.message || 'Failed to save booking'
+        });
+      }
+
+      // Send comprehensive email notification
+      if (data && data[0] && process.env.GMAIL_USER && process.env.GMAIL_PASS) {
+        try {
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: process.env.GMAIL_USER,
+              pass: process.env.GMAIL_PASS
+            }
+          });
+
+          const emailHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background: linear-gradient(135deg, #B1001E 0%, #D7263D 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+                .content { background: #f9f9f9; padding: 20px; border: 1px solid #ddd; }
+                .detail-row { margin: 15px 0; padding: 10px; background: white; border-left: 4px solid #B1001E; }
+                .label { font-weight: bold; color: #B1001E; }
+                .footer { background: #333; color: white; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h2>🎯 New Meeting Booking Request</h2>
+                </div>
+                <div class="content">
+                  <div class="detail-row">
+                    <span class="label">Name:</span> ${name}
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Email:</span> <a href="mailto:${email}">${email}</a>
+                  </div>
+                  ${company ? `<div class="detail-row"><span class="label">Company:</span> ${company}</div>` : ''}
+                  <div class="detail-row">
+                    <span class="label">Meeting Date:</span> ${formattedDate}
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Meeting Time:</span> ${time}
+                  </div>
+                  ${message ? `<div class="detail-row"><span class="label">Message:</span><br>${message.replace(/\n/g, '<br>')}</div>` : ''}
+                  <div class="detail-row">
+                    <span class="label">Booking ID:</span> ${data[0].id}
+                  </div>
+                  <div class="detail-row">
+                    <span class="label">Submitted:</span> ${new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'long' })}
+                  </div>
+                </div>
+                <div class="footer">
+                  <p>This is an automated notification from XenFlowTech booking system.</p>
+                  <p>Please respond to the client at: <a href="mailto:${email}" style="color: #B1001E;">${email}</a></p>
+                </div>
+              </div>
+            </body>
+            </html>
+          `;
+
+          const mailOptions = {
+            from: `"XenFlowTech Booking System" <${process.env.GMAIL_USER}>`,
+            to: 'xenflowtech@gmail.com',
+            subject: `📅 New Meeting Booking: ${name} - ${formattedDate} at ${time}`,
+            text: `
+New Meeting Booking Request
+
+Name: ${name}
+Email: ${email}
+${company ? `Company: ${company}` : ''}
+Meeting Date: ${formattedDate}
+Meeting Time: ${time}
+${message ? `Message:\n${message}` : ''}
+
+Booking ID: ${data[0].id}
+Submitted: ${new Date().toLocaleString()}
+
+Please respond to the client at: ${email}
+            `.trim(),
+            html: emailHtml
+          };
+
+          await transporter.sendMail(mailOptions);
+          console.log('✅ Booking email sent successfully');
+        } catch (emailError) {
+          console.error('❌ Error sending booking email:', emailError);
+          // Don't fail the request if email fails
+        }
+      }
+
+      res.status(201).json({
+        success: true,
+        message: 'Meeting booking submitted successfully! We\'ll confirm via email shortly.',
+        data: {
+          id: data[0].id,
+          name: data[0].name,
+          email: data[0].email,
+          date: formattedDate,
+          time: data[0].time,
+          status: 'pending'
+        }
+      });
 
     } catch (error) {
-        console.error('Booking submission error (catch):', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error: error.message || error
-        });
+      console.error('Booking submission error (catch):', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: error.message || 'An unexpected error occurred'
+      });
     }
-});
+  }
+);
 
 // Admin authentication endpoints
 app.post('/api/admin/login', async (req, res) => {
