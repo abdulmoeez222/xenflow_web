@@ -14,13 +14,22 @@ const app = express();
 app.set('trust proxy', 1); // Trust first proxy (Render, Heroku, etc.)
 const PORT = process.env.PORT || 5000;
 
-// Supabase client initialization
+// Supabase client initialization (custom fetch with timeout for Render/network reliability)
+const SUPABASE_FETCH_TIMEOUT_MS = 15000;
+function supabaseFetch(url, options = {}) {
+  const ctrl = new AbortController();
+  const to = setTimeout(() => ctrl.abort(), SUPABASE_FETCH_TIMEOUT_MS);
+  return fetch(url, { ...options, signal: ctrl.signal }).finally(() => clearTimeout(to));
+}
+
 let supabase;
 try {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
     console.warn('⚠️  Supabase environment variables not set. Contact form will not work.');
   } else {
-    supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+    supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
+      global: { fetch: supabaseFetch }
+    });
     console.log('✅ Supabase client initialized');
   }
 } catch (error) {
@@ -264,25 +273,52 @@ app.post('/api/booking',
         day: 'numeric' 
       });
 
-      const { data, error } = await supabase
-        .from('bookings')
-        .insert([{
-          name,
-          email,
-          company: company || '',
-          date,
-          time,
-          purpose: message || '',
-          status: 'pending',
-          timestamp: new Date().toISOString()
-        }])
-        .select();
+      if (!supabase) {
+        console.error('Booking submission error: Supabase client not initialized (missing SUPABASE_URL or SUPABASE_ANON_KEY)');
+        return res.status(503).json({
+          success: false,
+          message: 'Booking service is temporarily unavailable. Please try again shortly.',
+          error: 'Database not configured'
+        });
+      }
+
+      const insertPayload = [{
+        name,
+        email,
+        company: company || '',
+        date,
+        time,
+        purpose: message || '',
+        status: 'pending',
+        timestamp: new Date().toISOString()
+      }];
+
+      const maxAttempts = 3;
+      let data = null;
+      let error = null;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const result = await supabase.from('bookings').insert(insertPayload).select();
+        data = result.data;
+        error = result.error;
+        if (!error && data) break;
+        const isNetworkError = error?.message?.includes('fetch failed') || error?.message?.includes('ECONNRESET') || error?.message?.includes('ETIMEDOUT') || error?.message?.includes('ECONNREFUSED') || error?.code === 'PGRST301';
+        if (!isNetworkError || attempt === maxAttempts) break;
+        console.warn(`Booking Supabase attempt ${attempt}/${maxAttempts} failed (network), retrying in 1s...`, error?.message);
+        await new Promise(r => setTimeout(r, 1000));
+      }
 
       if (error || !data) {
-        console.error('Booking submission error:', error, data);
+        const isNetworkError = error?.message?.includes('fetch failed') || error?.message?.includes('ECONNRESET') || error?.message?.includes('ETIMEDOUT') || error?.message?.includes('ECONNREFUSED') || error?.code === 'PGRST301';
+        console.error('Booking submission error:', {
+          message: error?.message,
+          details: error?.details,
+          code: error?.code,
+          hint: isNetworkError ? 'Check SUPABASE_URL and SUPABASE_ANON_KEY on Render; ensure outbound HTTPS is allowed. May be a temporary network issue.' : undefined
+        });
         return res.status(500).json({
           success: false,
-          message: 'Internal server error',
+          message: isNetworkError ? 'Unable to reach the database. Please try again in a moment.' : 'Internal server error',
           error: error?.message || 'Failed to save booking'
         });
       }
