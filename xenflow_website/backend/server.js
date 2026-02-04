@@ -14,31 +14,7 @@ const app = express();
 app.set('trust proxy', 1); // Trust first proxy (Render, Heroku, etc.)
 const PORT = process.env.PORT || 5000;
 
-// Supabase client initialization (with custom fetch timeout for Render/network reliability)
-const SUPABASE_FETCH_TIMEOUT_MS = 15000;
-function supabaseFetch(url, options = {}) {
-  const ctrl = new AbortController();
-  const timeoutId = setTimeout(() => ctrl.abort(), SUPABASE_FETCH_TIMEOUT_MS);
-  
-  // Merge signals if one already exists
-  const existingSignal = options?.signal;
-  const finalSignal = existingSignal 
-    ? (() => {
-        const combined = new AbortController();
-        existingSignal.addEventListener('abort', () => combined.abort());
-        ctrl.signal.addEventListener('abort', () => combined.abort());
-        return combined.signal;
-      })()
-    : ctrl.signal;
-  
-  return fetch(url, { ...options, signal: finalSignal })
-    .finally(() => clearTimeout(timeoutId))
-    .catch(err => {
-      clearTimeout(timeoutId);
-      throw err;
-    });
-}
-
+// Supabase client initialization
 let supabase;
 try {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
@@ -46,9 +22,7 @@ try {
     console.warn('   SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'MISSING');
     console.warn('   SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'MISSING');
   } else {
-    supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
-      fetch: supabaseFetch
-    });
+    supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
     console.log('✅ Supabase client initialized with URL:', process.env.SUPABASE_URL);
   }
 } catch (error) {
@@ -108,6 +82,50 @@ app.get('/api/health', (req, res) => {
         message: 'XenFlowTech API is running',
         timestamp: new Date().toISOString()
     });
+});
+
+// Supabase connectivity test endpoint (for debugging)
+app.get('/api/test/supabase', async (req, res) => {
+  try {
+    if (!supabase) {
+      return res.status(503).json({
+        success: false,
+        message: 'Supabase client not initialized',
+        supabaseUrl: process.env.SUPABASE_URL ? 'SET' : 'MISSING',
+        supabaseKey: process.env.SUPABASE_ANON_KEY ? 'SET' : 'MISSING'
+      });
+    }
+
+    // Try a simple query to test connectivity
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('id')
+      .limit(1);
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Supabase query failed',
+        error: error.message,
+        code: error.code,
+        details: error.details
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Supabase connection successful',
+      supabaseUrl: process.env.SUPABASE_URL,
+      dataReceived: !!data
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Supabase test failed',
+      error: err.message,
+      stack: err.stack
+    });
+  }
 });
 
 // Chatbot routes
@@ -316,16 +334,44 @@ app.post('/api/booking',
       const maxAttempts = 3;
       let data = null;
       let error = null;
+      let lastError = null;
 
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        const result = await supabase.from('bookings').insert(insertPayload).select();
-        data = result.data;
-        error = result.error;
-        if (!error && data) break;
-        const isNetworkError = error?.message?.includes('fetch failed') || error?.message?.includes('ECONNRESET') || error?.message?.includes('ETIMEDOUT') || error?.message?.includes('ECONNREFUSED') || error?.code === 'PGRST301';
+        try {
+          const result = await supabase.from('bookings').insert(insertPayload).select();
+          data = result.data;
+          error = result.error;
+          if (!error && data && Array.isArray(data) && data.length > 0) {
+            console.log(`✅ Booking insert successful on attempt ${attempt}`);
+            break;
+          }
+          lastError = error;
+        } catch (fetchError) {
+          // Catch fetch errors that Supabase might throw
+          console.warn(`Booking Supabase attempt ${attempt}/${maxAttempts} threw error:`, fetchError.message);
+          lastError = { message: fetchError.message, details: fetchError.stack };
+          error = lastError;
+        }
+        
+        const isNetworkError = error?.message?.includes('fetch failed') || 
+                              error?.message?.includes('ECONNRESET') || 
+                              error?.message?.includes('ETIMEDOUT') || 
+                              error?.message?.includes('ECONNREFUSED') ||
+                              error?.message?.includes('aborted') ||
+                              lastError?.message?.includes('fetch failed') ||
+                              error?.code === 'PGRST301';
+        
         if (!isNetworkError || attempt === maxAttempts) break;
-        console.warn(`Booking Supabase attempt ${attempt}/${maxAttempts} failed (network), retrying in 1s...`, error?.message);
-        await new Promise(r => setTimeout(r, 1000));
+        
+        // Exponential backoff: 1s, 2s, 4s
+        const delayMs = Math.min(1000 * Math.pow(2, attempt - 1), 4000);
+        console.warn(`Booking Supabase attempt ${attempt}/${maxAttempts} failed (network), retrying in ${delayMs}ms...`, error?.message || lastError?.message);
+        await new Promise(r => setTimeout(r, delayMs));
+      }
+      
+      // Use lastError if error is null but we had failures
+      if (!error && lastError) {
+        error = lastError;
       }
 
       if (error || !data || !Array.isArray(data) || data.length === 0) {
