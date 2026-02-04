@@ -16,7 +16,8 @@ export default function AdminLogin() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('https://xenflow-backend.onrender.com/api/admin/login', {
+      const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000' : 'https://xenflow-backend.onrender.com');
+      const res = await fetch(`${API_URL}/api/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

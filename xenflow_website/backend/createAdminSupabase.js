@@ -3,12 +3,21 @@ const { createClient } = require('@supabase/supabase-js');
 const bcrypt = require('bcryptjs');
 const readline = require('readline');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+let rl = null;
 
-const ask = (q) => new Promise(res => rl.question(q, res));
+const ask = (q) => {
+  return new Promise((res) => {
+    if (!rl || rl.closed) {
+      rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+    }
+    rl.question(q, (answer) => {
+      res(answer);
+    });
+  });
+};
 
 (async () => {
   try {
@@ -45,10 +54,12 @@ const ask = (q) => new Promise(res => rl.question(q, res));
     console.log('✅ Connected to Supabase\n');
 
     // Get admin credentials
-    const username = await ask('Enter admin username (default: admin): ') || 'admin';
+    let username = await ask('Enter admin username (default: admin): ');
+    username = username.trim() || 'admin';
+    
     const password = await ask('Enter admin password: ');
     
-    if (!password) {
+    if (!password || !password.trim()) {
       console.error('❌ Password cannot be empty');
       rl.close();
       process.exit(1);
@@ -116,13 +127,20 @@ const ask = (q) => new Promise(res => rl.question(q, res));
     console.log(`   Username: ${username}`);
     console.log(`   Role: admin`);
     console.log(`   Password: [hidden]`);
-    console.log('\n✅ Setup complete! You can now log in at /admin/login');
+    console.log('\n⚠️  SAVE THESE CREDENTIALS NOW - the password cannot be recovered.');
+    console.log('   Login at: https://www.xenflow.tech/admin/login');
+    console.log('\n✅ Setup complete!');
 
   } catch (error) {
     console.error('❌ Unexpected error:', error.message);
     console.error('   Stack:', error.stack);
+    if (rl && !rl.closed) {
+      rl.close();
+    }
     process.exit(1);
   } finally {
-    rl.close();
+    if (rl && !rl.closed) {
+      rl.close();
+    }
   }
 })();

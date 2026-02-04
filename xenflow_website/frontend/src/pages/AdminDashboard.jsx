@@ -11,7 +11,8 @@ export default function AdminDashboard() {
 
   // Check admin session
   useEffect(() => {
-    fetch('https://xenflow-backend.onrender.com/api/admin/session', { credentials: 'include' })
+    const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000' : 'https://xenflow-backend.onrender.com');
+    fetch(`${API_URL}/api/admin/session`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         if (!data.loggedIn) navigate('/admin');
@@ -19,11 +20,12 @@ export default function AdminDashboard() {
   }, [navigate]);
 
   useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000' : 'https://xenflow-backend.onrender.com');
     setLoading(true);
     setError(null);
     Promise.all([
-      fetch('https://xenflow-backend.onrender.com/api/admin/contacts', { credentials: 'include' }).then(r => r.json()),
-      fetch('https://xenflow-backend.onrender.com/api/admin/bookings', { credentials: 'include' }).then(r => r.json())
+      fetch(`${API_URL}/api/admin/contacts`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${API_URL}/api/admin/bookings`, { credentials: 'include' }).then(r => r.json())
     ])
       .then(([contactsRes, bookingsRes]) => {
         if (!contactsRes.success || !bookingsRes.success) throw new Error('Failed to fetch data');
@@ -35,7 +37,8 @@ export default function AdminDashboard() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch('https://xenflow-backend.onrender.com/api/admin/logout', { method: 'POST', credentials: 'include' });
+    const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000' : 'https://xenflow-backend.onrender.com');
+    await fetch(`${API_URL}/api/admin/logout`, { method: 'POST', credentials: 'include' });
     navigate('/admin');
   };
 
@@ -74,7 +77,7 @@ export default function AdminDashboard() {
                       {contacts.length === 0 ? (
                         <tr><td colSpan={5} className="text-center py-4">No contacts yet.</td></tr>
                       ) : contacts.map(c => (
-                        <tr key={c._id} className="border-b border-accent/10 hover:bg-dark/40">
+                        <tr key={c.id ?? c._id ?? c.email} className="border-b border-accent/10 hover:bg-dark/40">
                           <td className="p-2 font-semibold">{c.name}</td>
                           <td className="p-2">{c.email}</td>
                           <td className="p-2">{c.company}</td>
@@ -107,7 +110,7 @@ export default function AdminDashboard() {
                       {bookings.length === 0 ? (
                         <tr><td colSpan={7} className="text-center py-4">No bookings yet.</td></tr>
                       ) : bookings.map(b => (
-                        <tr key={b._id} className="border-b border-accent/10 hover:bg-dark/40">
+                        <tr key={b.id ?? b._id ?? b.email} className="border-b border-accent/10 hover:bg-dark/40">
                           <td className="p-2 font-semibold">{b.name}</td>
                           <td className="p-2">{b.email}</td>
                           <td className="p-2">{b.company}</td>

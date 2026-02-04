@@ -221,7 +221,12 @@ You should see:
 - ✅ Verify the Supabase project is active (not paused)
 - ✅ Check Supabase dashboard → Settings → API for correct values
 
-### "Row Level Security policy violation"
+### "new row violates row-level security policy for table 'bookings'"
+- ✅ Run the fix script: **Supabase SQL Editor** → run `backend/fix_bookings_rls.sql`
+- ✅ This allows the backend (anon key) to INSERT into `bookings` and `contacts`
+- ✅ Then try the booking form again
+
+### "Row Level Security policy violation" (other tables)
 - ✅ Make sure RLS policies are created (run the SQL scripts above)
 - ✅ Check that policies allow `anon` role to INSERT
 
@@ -229,9 +234,15 @@ You should see:
 - ✅ Run all SQL scripts in Step 3
 - ✅ Verify table names match: `bookings`, `contacts`, `users`
 
+### Admin credentials (what did I create?)
+- The script **does not store** your username/password anywhere except in the database (hashed).
+- **Credentials** = whatever you typed when you ran `node createAdminSupabase.js` (username and password).
+- If you forgot: run `node createAdminSupabase.js` again and choose a new password (option to overwrite existing user).
+
 ### Admin login not working
-- ✅ Create admin user using `createAdmin.js` script
+- ✅ Create admin user using `node createAdminSupabase.js`
 - ✅ Verify `users` table has a row with `role='admin'`
+- ✅ Use the **exact** username and password you entered when creating the admin
 
 ## Security Notes
 
