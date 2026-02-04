@@ -432,20 +432,8 @@ app.post('/api/booking',
       }
 
       // Send comprehensive email notification (booking already saved; email is best-effort)
-      if (data && data[0] && process.env.GMAIL_USER && process.env.GMAIL_PASS) {
-        try {
-          const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: process.env.GMAIL_USER,
-              pass: process.env.GMAIL_PASS
-            },
-            connectionTimeout: 10000,
-            greetingTimeout: 10000,
-            socketTimeout: 15000
-          });
-
-          const emailHtml = `
+      const bookingNotificationEmail = process.env.BOOKING_NOTIFY_EMAIL || 'xenflowtech@gmail.com';
+      const emailHtml = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -495,11 +483,8 @@ app.post('/api/booking',
             </html>
           `;
 
-          const mailOptions = {
-            from: `"XenFlowTech Booking System" <${process.env.GMAIL_USER}>`,
-            to: 'xenflowtech@gmail.com',
-            subject: `📅 New Meeting Booking: ${name} - ${formattedDate} at ${time}`,
-            text: `
+      const emailSubject = `📅 New Meeting Booking: ${name} - ${formattedDate} at ${time}`;
+      const emailText = `
 New Meeting Booking Request
 
 Name: ${name}
@@ -513,19 +498,59 @@ Booking ID: ${data[0].id}
 Submitted: ${new Date().toLocaleString()}
 
 Please respond to the client at: ${email}
-            `.trim(),
-            html: emailHtml
-          };
+      `.trim();
 
-          await transporter.sendMail(mailOptions);
-          console.log('✅ Booking email sent successfully');
+      const shouldSendEmail = process.env.RESEND_API_KEY || (process.env.GMAIL_USER && process.env.GMAIL_PASS);
+      if (data && data[0] && shouldSendEmail) {
+        try {
+          if (process.env.RESEND_API_KEY) {
+            const from = process.env.RESEND_FROM || 'XenFlowTech <onboarding@resend.dev>';
+            const res = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+              },
+              body: JSON.stringify({
+                from,
+                to: [bookingNotificationEmail],
+                subject: emailSubject,
+                html: emailHtml,
+                text: emailText
+              })
+            });
+            const resData = await res.json();
+            if (res.ok && resData.id) {
+              console.log('✅ Booking email sent via Resend');
+            } else {
+              throw new Error(resData.message || res.statusText || 'Resend API error');
+            }
+          } else {
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASS
+              },
+              connectionTimeout: 10000,
+              greetingTimeout: 10000,
+              socketTimeout: 15000
+            });
+            await transporter.sendMail({
+              from: `"XenFlowTech Booking System" <${process.env.GMAIL_USER}>`,
+              to: bookingNotificationEmail,
+              subject: emailSubject,
+              text: emailText,
+              html: emailHtml
+            });
+            console.log('✅ Booking email sent via Gmail');
+          }
         } catch (emailError) {
           const isTimeout = emailError.code === 'ETIMEDOUT' || emailError.code === 'ESOCKET';
           console.error('❌ Error sending booking email:', emailError.message || emailError);
           if (isTimeout) {
-            console.warn('⚠️  SMTP connection timed out. Booking was saved. On Render, Gmail SMTP is often blocked; consider Resend/SendGrid API.');
+            console.warn('⚠️  SMTP timed out. Use RESEND_API_KEY on Render for reliable email.');
           }
-          // Don't fail the request – booking is already saved
         }
       }
 
