@@ -526,15 +526,19 @@ Please respond to the client at: ${email}
               throw new Error(resData.message || res.statusText || 'Resend API error');
             }
           } else {
+            // Gmail: try port 465 (SSL) first; some hosts block 587 but allow 465
+            const usePort465 = process.env.GMAIL_USE_PORT_465 !== '0';
             const transporter = nodemailer.createTransport({
-              service: 'gmail',
+              host: 'smtp.gmail.com',
+              port: usePort465 ? 465 : 587,
+              secure: usePort465,
               auth: {
                 user: process.env.GMAIL_USER,
                 pass: process.env.GMAIL_PASS
               },
-              connectionTimeout: 10000,
+              connectionTimeout: 15000,
               greetingTimeout: 10000,
-              socketTimeout: 15000
+              socketTimeout: 20000
             });
             await transporter.sendMail({
               from: `"XenFlowTech Booking System" <${process.env.GMAIL_USER}>`,
@@ -549,7 +553,7 @@ Please respond to the client at: ${email}
           const isTimeout = emailError.code === 'ETIMEDOUT' || emailError.code === 'ESOCKET';
           console.error('❌ Error sending booking email:', emailError.message || emailError);
           if (isTimeout) {
-            console.warn('⚠️  SMTP timed out. Use RESEND_API_KEY on Render for reliable email.');
+            console.warn('⚠️  SMTP timed out. If on Render, outbound SMTP is often blocked; try GMAIL_USE_PORT_465=0 to use port 587, or deploy elsewhere (e.g. Railway/VPS) for Gmail.');
           }
         }
       }

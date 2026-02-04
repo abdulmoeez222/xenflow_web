@@ -1,0 +1,18 @@
+---
+description: Always push code changes to GitHub after making edits
+alwaysApply: true
+---
+
+# Push to GitHub After Changes
+
+When you make any code or config changes in this project:
+
+1. **Stage** all modified and new files (e.g. `git add` for the changed paths).
+2. **Commit** with a short, descriptive message (e.g. "Booking: use Gmail port 465, add env note").
+3. **Push** to the default branch: `git push origin main`.
+
+Do this **without the user asking**. Push at the end of the same turn where you made the changes, when the changes are ready to go.
+
+- Use `git status` first if unsure what changed.
+- Request `git_write` and `network` permissions when running git commit/push.
+- If there are no changes or nothing to push, skip the push step.

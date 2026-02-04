@@ -85,14 +85,14 @@ If **both** `RESEND_API_KEY` and Gmail are set, **Resend is used first**.
 
 ### "Connection timeout" or "ETIMEDOUT" on Render
 
-Many cloud hosts (including Render’s free tier) block or restrict outbound SMTP. So:
+Many cloud hosts (including Render) block or restrict outbound SMTP, so Gmail may never connect from there.
 
-- **Booking is still saved** – you can see it in Admin Dashboard and in Supabase.
-- **Options:**
-  1. Keep Gmail: emails may work only sometimes from Render.
-  2. Use an HTTP-based provider (recommended for production):
-     - [Resend](https://resend.com) – free tier, API key, works well on Render.
-     - [SendGrid](https://sendgrid.com) – free tier, API key.
+- **Booking is still saved** – check Admin Dashboard or Supabase.
+- **Gmail-only options:**
+  1. **Try port 465 (default now):** The app uses Gmail on port 465 (SSL) first. If it still times out, set env **`GMAIL_USE_PORT_465=0`** to try port 587, then redeploy.
+  2. **Deploy the backend somewhere that allows SMTP:** e.g. Railway, Fly.io, or a VPS (DigitalOcean, Linode, etc.). Gmail SMTP often works from those.
+  3. **Use Gmail only on local:** Run the backend locally for testing; set `GMAIL_USER` and `GMAIL_PASS` in `.env`. Production bookings won’t send email from Render if SMTP is blocked.
+- **If you’re okay using another sender:** Use [Resend](https://resend.com) (set `RESEND_API_KEY` on Render); then you can remove Gmail env vars for production.
 
 ### "Invalid credentials" or "Username and Password not accepted"
 
