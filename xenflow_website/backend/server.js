@@ -14,26 +14,46 @@ const app = express();
 app.set('trust proxy', 1); // Trust first proxy (Render, Heroku, etc.)
 const PORT = process.env.PORT || 5000;
 
-// Supabase client initialization (custom fetch with timeout for Render/network reliability)
+// Supabase client initialization (with custom fetch timeout for Render/network reliability)
 const SUPABASE_FETCH_TIMEOUT_MS = 15000;
 function supabaseFetch(url, options = {}) {
   const ctrl = new AbortController();
-  const to = setTimeout(() => ctrl.abort(), SUPABASE_FETCH_TIMEOUT_MS);
-  return fetch(url, { ...options, signal: ctrl.signal }).finally(() => clearTimeout(to));
+  const timeoutId = setTimeout(() => ctrl.abort(), SUPABASE_FETCH_TIMEOUT_MS);
+  
+  // Merge signals if one already exists
+  const existingSignal = options?.signal;
+  const finalSignal = existingSignal 
+    ? (() => {
+        const combined = new AbortController();
+        existingSignal.addEventListener('abort', () => combined.abort());
+        ctrl.signal.addEventListener('abort', () => combined.abort());
+        return combined.signal;
+      })()
+    : ctrl.signal;
+  
+  return fetch(url, { ...options, signal: finalSignal })
+    .finally(() => clearTimeout(timeoutId))
+    .catch(err => {
+      clearTimeout(timeoutId);
+      throw err;
+    });
 }
 
 let supabase;
 try {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
     console.warn('⚠️  Supabase environment variables not set. Contact form will not work.');
+    console.warn('   SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'MISSING');
+    console.warn('   SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'MISSING');
   } else {
     supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
-      global: { fetch: supabaseFetch }
+      fetch: supabaseFetch
     });
-    console.log('✅ Supabase client initialized');
+    console.log('✅ Supabase client initialized with URL:', process.env.SUPABASE_URL);
   }
 } catch (error) {
   console.error('❌ Failed to initialize Supabase:', error);
+  console.error('   Error details:', error.message, error.stack);
 }
 
 // Security middleware
@@ -308,17 +328,20 @@ app.post('/api/booking',
         await new Promise(r => setTimeout(r, 1000));
       }
 
-      if (error || !data) {
+      if (error || !data || !Array.isArray(data) || data.length === 0) {
         const isNetworkError = error?.message?.includes('fetch failed') || error?.message?.includes('ECONNRESET') || error?.message?.includes('ETIMEDOUT') || error?.message?.includes('ECONNREFUSED') || error?.code === 'PGRST301';
         console.error('Booking submission error:', {
           message: error?.message,
           details: error?.details,
           code: error?.code,
-          hint: isNetworkError ? 'Check SUPABASE_URL and SUPABASE_ANON_KEY on Render; ensure outbound HTTPS is allowed. May be a temporary network issue.' : undefined
+          dataReceived: data,
+          dataIsArray: Array.isArray(data),
+          dataLength: Array.isArray(data) ? data.length : 'N/A',
+          hint: isNetworkError ? 'Check SUPABASE_URL and SUPABASE_ANON_KEY on Render; ensure outbound HTTPS is allowed. May be a temporary network issue.' : 'Check Supabase table schema matches insert payload (name, email, company, date, time, purpose, status, timestamp)'
         });
         return res.status(500).json({
           success: false,
-          message: isNetworkError ? 'Unable to reach the database. Please try again in a moment.' : 'Internal server error',
+          message: isNetworkError ? 'Unable to reach the database. Please try again in a moment.' : (error?.message || 'Failed to save booking'),
           error: error?.message || 'Failed to save booking'
         });
       }
@@ -428,7 +451,12 @@ Please respond to the client at: ${email}
       });
 
     } catch (error) {
-      console.error('Booking submission error (catch):', error);
+      console.error('Booking submission error (catch):', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+        cause: error.cause
+      });
       res.status(500).json({
         success: false,
         message: 'Internal server error',
