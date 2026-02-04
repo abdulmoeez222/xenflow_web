@@ -40,12 +40,10 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // CORS configuration
-// Allow production frontend domains and local development
+// Production: only www.xenflow.tech; localhost for development
 app.use(cors({
     origin: [
-        'https://www.xenflow.tech',       // Primary production frontend
-        'https://xenflow.tech',           // Bare domain (in case it serves frontend)
-        'https://xenflow-web.vercel.app', // Legacy Vercel preview / old frontend
+        'https://www.xenflow.tech',       // Production frontend (only allowed origin)
         'http://localhost:5173',          // Local dev (Vite default)
         'http://localhost:5174',          // Local dev (alternative port)
         /^http:\/\/localhost:\d+$/        // Allow any localhost port for dev
