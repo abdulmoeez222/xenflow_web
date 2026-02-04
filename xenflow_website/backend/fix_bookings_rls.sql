@@ -4,26 +4,34 @@
 -- Run this in Supabase SQL Editor if you get:
 -- "new row violates row-level security policy for table 'bookings'"
 --
--- Your backend uses SUPABASE_ANON_KEY, so the "anon" role must be allowed to INSERT.
+-- Your backend uses SUPABASE_ANON_KEY (anon role). Supabase returns the inserted
+-- row after INSERT, so anon needs both INSERT and SELECT policies.
 
--- 1. Bookings: drop existing insert policy if any, then allow anon to insert
+-- 1. Bookings
 DROP POLICY IF EXISTS "Allow public inserts" ON bookings;
+DROP POLICY IF EXISTS "Allow anon select bookings" ON bookings;
+
 CREATE POLICY "Allow public inserts" ON bookings
   FOR INSERT
   TO anon, authenticated
   WITH CHECK (true);
 
--- Optional: allow anon to read own rows (not required for form submit)
--- DROP POLICY IF EXISTS "Allow anon select" ON bookings;
--- CREATE POLICY "Allow anon select" ON bookings FOR SELECT TO anon USING (true);
+-- Required: INSERT returns the new row, so anon must be allowed to SELECT
+CREATE POLICY "Allow anon select bookings" ON bookings
+  FOR SELECT
+  TO anon, authenticated
+  USING (true);
 
--- 2. Contacts: same fix
+-- 2. Contacts (same)
 DROP POLICY IF EXISTS "Allow public inserts" ON contacts;
+DROP POLICY IF EXISTS "Allow anon select contacts" ON contacts;
+
 CREATE POLICY "Allow public inserts" ON contacts
   FOR INSERT
   TO anon, authenticated
   WITH CHECK (true);
 
--- Verify: list policies (run separately if you want to check)
--- SELECT schemaname, tablename, policyname, permissive, roles, cmd, qual
--- FROM pg_policies WHERE tablename IN ('bookings', 'contacts');
+CREATE POLICY "Allow anon select contacts" ON contacts
+  FOR SELECT
+  TO anon, authenticated
+  USING (true);

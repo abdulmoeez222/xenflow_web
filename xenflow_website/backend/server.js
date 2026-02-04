@@ -431,7 +431,7 @@ app.post('/api/booking',
         });
       }
 
-      // Send comprehensive email notification
+      // Send comprehensive email notification (booking already saved; email is best-effort)
       if (data && data[0] && process.env.GMAIL_USER && process.env.GMAIL_PASS) {
         try {
           const transporter = nodemailer.createTransport({
@@ -439,7 +439,10 @@ app.post('/api/booking',
             auth: {
               user: process.env.GMAIL_USER,
               pass: process.env.GMAIL_PASS
-            }
+            },
+            connectionTimeout: 10000,
+            greetingTimeout: 10000,
+            socketTimeout: 15000
           });
 
           const emailHtml = `
@@ -517,8 +520,12 @@ Please respond to the client at: ${email}
           await transporter.sendMail(mailOptions);
           console.log('✅ Booking email sent successfully');
         } catch (emailError) {
-          console.error('❌ Error sending booking email:', emailError);
-          // Don't fail the request if email fails
+          const isTimeout = emailError.code === 'ETIMEDOUT' || emailError.code === 'ESOCKET';
+          console.error('❌ Error sending booking email:', emailError.message || emailError);
+          if (isTimeout) {
+            console.warn('⚠️  SMTP connection timed out. Booking was saved. On Render, Gmail SMTP is often blocked; consider Resend/SendGrid API.');
+          }
+          // Don't fail the request – booking is already saved
         }
       }
 

@@ -256,7 +256,8 @@ You should see:
 1. ✅ Test booking form submission
 2. ✅ Test contact form submission  
 3. ✅ Test admin login at `/admin/login`
-4. ✅ Set up email notifications (add `GMAIL_USER` and `GMAIL_PASS` to Render env vars)
+4. ✅ Set up email notifications (add `GMAIL_USER` and `GMAIL_PASS` to Render env vars).  
+   **Note:** On Render, Gmail SMTP often times out (outbound SMTP may be blocked). Bookings are still saved. For reliable email, consider [Resend](https://resend.com) or [SendGrid](https://sendgrid.com) API instead of Gmail.
 
 ---
 
