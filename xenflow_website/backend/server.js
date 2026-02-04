@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 5000;
 
 // Supabase client initialization
 let supabase;
+let supabaseInitialized = false;
 try {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
     console.warn('⚠️  Supabase environment variables not set. Contact form will not work.');
@@ -23,7 +24,26 @@ try {
     console.warn('   SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? 'SET' : 'MISSING');
   } else {
     supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+    supabaseInitialized = true;
     console.log('✅ Supabase client initialized with URL:', process.env.SUPABASE_URL);
+    
+    // Test connection on startup (non-blocking)
+    (async () => {
+      try {
+        const { error } = await supabase.from('bookings').select('id').limit(1);
+        if (error) {
+          console.error('⚠️  Supabase connection test failed:', error.message);
+          if (error.message.includes('fetch failed') || error.code === 'PGRST301') {
+            console.error('   ⚠️  WARNING: This may indicate your Supabase project is paused or inaccessible.');
+            console.error('   ⚠️  Check your Supabase dashboard - project may need to be restored.');
+          }
+        } else {
+          console.log('✅ Supabase connection test successful');
+        }
+      } catch (err) {
+        console.error('⚠️  Supabase connection test error:', err.message);
+      }
+    })();
   }
 } catch (error) {
   console.error('❌ Failed to initialize Supabase:', error);
@@ -311,11 +331,11 @@ app.post('/api/booking',
         day: 'numeric' 
       });
 
-      if (!supabase) {
+      if (!supabase || !supabaseInitialized) {
         console.error('Booking submission error: Supabase client not initialized (missing SUPABASE_URL or SUPABASE_ANON_KEY)');
         return res.status(503).json({
           success: false,
-          message: 'Booking service is temporarily unavailable. Please try again shortly.',
+          message: 'Booking service is temporarily unavailable. Database configuration error.',
           error: 'Database not configured'
         });
       }
@@ -375,7 +395,17 @@ app.post('/api/booking',
       }
 
       if (error || !data || !Array.isArray(data) || data.length === 0) {
-        const isNetworkError = error?.message?.includes('fetch failed') || error?.message?.includes('ECONNRESET') || error?.message?.includes('ETIMEDOUT') || error?.message?.includes('ECONNREFUSED') || error?.code === 'PGRST301';
+        const isNetworkError = error?.message?.includes('fetch failed') || 
+                              error?.message?.includes('ECONNRESET') || 
+                              error?.message?.includes('ETIMEDOUT') || 
+                              error?.message?.includes('ECONNREFUSED') ||
+                              error?.code === 'PGRST301';
+        
+        const isPausedProject = isNetworkError && (
+          error?.message?.includes('fetch failed') || 
+          error?.code === 'PGRST301'
+        );
+        
         console.error('Booking submission error:', {
           message: error?.message,
           details: error?.details,
@@ -383,11 +413,20 @@ app.post('/api/booking',
           dataReceived: data,
           dataIsArray: Array.isArray(data),
           dataLength: Array.isArray(data) ? data.length : 'N/A',
-          hint: isNetworkError ? 'Check SUPABASE_URL and SUPABASE_ANON_KEY on Render; ensure outbound HTTPS is allowed. May be a temporary network issue.' : 'Check Supabase table schema matches insert payload (name, email, company, date, time, purpose, status, timestamp)'
+          hint: isPausedProject 
+            ? '⚠️  Supabase project may be paused. Check your Supabase dashboard - project needs to be restored or recreated.'
+            : isNetworkError 
+              ? 'Check SUPABASE_URL and SUPABASE_ANON_KEY on Render; ensure outbound HTTPS is allowed. May be a temporary network issue.'
+              : 'Check Supabase table schema matches insert payload (name, email, company, date, time, purpose, status, timestamp)'
         });
+        
         return res.status(500).json({
           success: false,
-          message: isNetworkError ? 'Unable to reach the database. Please try again in a moment.' : (error?.message || 'Failed to save booking'),
+          message: isPausedProject 
+            ? 'Database service is currently unavailable. Please contact support.'
+            : isNetworkError 
+              ? 'Unable to reach the database. Please try again in a moment.'
+              : (error?.message || 'Failed to save booking'),
           error: error?.message || 'Failed to save booking'
         });
       }
