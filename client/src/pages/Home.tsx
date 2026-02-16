@@ -242,6 +242,102 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Founder Section */}
+      <section id="founder" className="py-32 relative border-t border-white/5 bg-black/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative aspect-[4/5] rounded-2xl overflow-hidden glass-card p-1"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60"
+                alt="Julian Xenflow - Founder"
+                className="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+              <div className="absolute bottom-8 left-8">
+                <p className="font-mono text-primary text-sm mb-2 tracking-widest uppercase">[ FOUNDER & CEO ]</p>
+                <h3 className="text-3xl font-bold">Julian Xenflow</h3>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <p className="font-mono text-primary text-xs tracking-[0.3em] mb-6 uppercase">[ THE VISION ]</p>
+              <h2 className="text-4xl md:text-5xl font-bold mb-8 font-mono leading-tight">
+                The Intersection of <br />
+                <span className="text-primary">Logic and Creativity</span>
+              </h2>
+              <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+                <p>
+                  "Evolution has taught us a single lesson: that artificial intelligence should not just replace labor, but amplify human potential."
+                </p>
+                <p>
+                  After years of pioneering AI labs from Baltic systems to quantum intelligence, I built Xenflow to bring that clarity back into the system-level process.
+                </p>
+                <p>
+                  At Xenflow, we don't just 'deploy' AI. We architect bespoke ecosystems where intuition meets hyper-modal logic. We create systems that allow founders to step away from the mundane and back into their true vision.
+                </p>
+              </div>
+              <div className="mt-10 flex items-center space-x-6">
+                <div className="h-px w-12 bg-primary" />
+                <span className="font-mono text-sm tracking-widest uppercase">Julian Xenflow</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Section */}
+      <section id="team" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <p className="font-mono text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ OUR AGENTS ]</p>
+            <h2 className="text-4xl md:text-5xl font-bold font-mono uppercase tracking-tighter">Selected Intelligence</h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { name: "Alex Rivera", role: "Neural Architect", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60" },
+              { name: "Sarah Chen", role: "LLM Specialist", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60" },
+              { name: "Marcus Thorne", role: "Core Systems", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=60" },
+              { name: "Elena Voss", role: "UX Perception", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop&q=60" }
+            ].map((member, i) => (
+              <motion.div
+                key={member.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative"
+              >
+                <div className="aspect-[3/4] rounded-xl overflow-hidden glass-card mb-4">
+                  <img 
+                    src={member.img} 
+                    alt={member.name}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+                <h3 className="text-xl font-bold font-mono">{member.name}</h3>
+                <p className="text-sm text-primary font-mono tracking-widest uppercase mt-1">{member.role}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section id="contact" className="py-32 relative">
         <FloatingShape className="w-[400px] h-[400px] right-0 bottom-0 bg-primary/10" duration={20} />
