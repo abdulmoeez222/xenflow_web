@@ -9,78 +9,80 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Services", href: "#services" },
+    { name: "Our Tech", href: "#tech" },
+    { name: "Case Studies", href: "#work" },
     { name: "About", href: "#about" },
-    { name: "Work", href: "#work" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link href="/" className="flex-shrink-0 cursor-pointer group">
-            <span className="font-mono text-2xl font-bold tracking-tighter text-white">
-              XEN<span className="text-primary group-hover:neon-glow transition-all duration-300">FLOW</span>
-            </span>
-          </Link>
+    <header className="fixed top-6 left-0 right-0 z-50 px-6">
+      <nav className="max-w-7xl mx-auto flex items-center justify-between px-8 py-4 glass-card rounded-full border border-white/10 shadow-2xl">
+        {/* Left: Logo */}
+        <Link href="/" className="flex items-center cursor-pointer group">
+          <span className="font-mono text-2xl font-bold tracking-tighter text-white">
+            XEN<span className="text-primary group-hover:neon-glow transition-all duration-300">FLOW</span>
+          </span>
+        </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-white transition-colors duration-200"
-              >
-                {link.name}
-              </a>
-            ))}
-            <a href="#contact">
-              <Button 
-                variant="outline" 
-                className="border-primary/50 text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full px-6"
-              >
-                Start Project
-              </Button>
-            </a>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:text-primary transition-colors p-2"
+        {/* Center: Desktop Nav */}
+        <div className="hidden md:flex items-center space-x-10">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="text-xs font-medium text-muted-foreground hover:text-white transition-all duration-200 uppercase tracking-[0.2em]"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+              {link.name}
+            </a>
+          ))}
         </div>
-      </div>
+
+        {/* Right: CTA */}
+        <div className="hidden md:block">
+          <a href="#contact">
+            <Button 
+              className="bg-primary hover:bg-red-700 text-white px-6 py-2 rounded-full text-xs font-bold transition-all transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,0,0,0.3)]"
+            >
+              Get Started
+            </Button>
+          </a>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-white hover:text-primary transition-colors p-2"
+          >
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </nav>
 
       {/* Mobile Nav */}
       <motion.div
         initial={false}
         animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-        className="md:hidden overflow-hidden bg-background border-b border-white/5"
+        className="md:hidden overflow-hidden bg-background/95 backdrop-blur-xl border border-white/10 rounded-3xl mt-4"
       >
-        <div className="px-4 py-6 space-y-4">
+        <div className="px-6 py-8 space-y-6">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="block text-lg font-medium text-muted-foreground hover:text-white transition-colors"
+              className="block text-sm font-medium text-muted-foreground hover:text-white transition-colors uppercase tracking-widest"
             >
               {link.name}
             </a>
           ))}
           <a href="#contact" onClick={() => setIsOpen(false)} className="block pt-4">
-            <Button className="w-full bg-primary hover:bg-primary/80 text-white">
-              Start Project
+            <Button className="w-full bg-primary hover:bg-red-700 text-white rounded-full">
+              Get Started
             </Button>
           </a>
         </div>
       </motion.div>
-    </nav>
+    </header>
   );
 }
