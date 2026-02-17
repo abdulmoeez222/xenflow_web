@@ -40,7 +40,7 @@ export function Navbar() {
         {/* Right: CTA */}
         <div className="hidden md:block">
           <a href="#contact">
-            <Button 
+            <Button
               className="bg-primary hover:bg-red-700 text-white px-6 py-2 rounded-full text-xs font-bold transition-all transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,0,0,0.3)]"
             >
               Get Started

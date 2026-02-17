@@ -5,7 +5,8 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 3%; /* #080808 */
+  --background: 0 0% 3%;
+  /* #080808 */
   --foreground: 0 0% 98%;
 
   --card: 0 0% 5%;
@@ -14,7 +15,8 @@
   --popover: 0 0% 5%;
   --popover-foreground: 0 0% 98%;
 
-  --primary: 0 100% 50%; /* #FF0000 Neon Red */
+  --primary: 0 100% 50%;
+  /* #FF0000 Neon Red */
   --primary-foreground: 0 0% 100%;
 
   --secondary: 0 0% 12%;
@@ -37,6 +39,7 @@
 
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'Space Mono', monospace;
+  --font-serif: 'Playfair Display', serif;
 }
 
 @layer base {
@@ -45,7 +48,12 @@
     font-family: var(--font-sans);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-mono);
     @apply font-bold tracking-tight;
   }
@@ -55,7 +63,7 @@
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-neutral-500;
   }
-  
+
   .text-gradient-primary {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-red-500 to-orange-600;
   }
@@ -89,4 +97,25 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
+}
+
+/* Testimonials Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }

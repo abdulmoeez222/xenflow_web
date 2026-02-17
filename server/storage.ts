@@ -11,6 +11,9 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
+    if (!db) {
+      throw new Error("Database not configured. Please set DATABASE_URL environment variable.");
+    }
     const [newMessage] = await db
       .insert(contactMessages)
       .values(message)
