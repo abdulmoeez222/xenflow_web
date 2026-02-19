@@ -690,7 +690,7 @@ export default function Home() {
                   }}
                 >
                   <div className="group bg-black p-6 rounded-[24px] h-full transition-all duration-500 hover:bg-primary hover:scale-105 cursor-pointer border border-white/5 flex flex-col justify-between">
-                    <p className="font-serif text-base md:text-lg text-white/90 italic leading-relaxed mb-6 group-hover:text-dark transition-colors duration-500">
+                    <p className="font-sans text-base md:text-lg text-white/90 italic leading-relaxed mb-6 group-hover:text-dark transition-colors duration-500">
                       "{testimonial.quote}"
                     </p>
                     <div className="flex items-center gap-3">
@@ -767,7 +767,7 @@ export default function Home() {
                   }}
                 >
                   <div className="group bg-black p-6 rounded-[24px] h-full transition-all duration-500 hover:bg-primary hover:scale-105 cursor-pointer border border-white/5 flex flex-col justify-between">
-                    <p className="font-serif text-base md:text-lg text-white/90 italic leading-relaxed mb-6 group-hover:text-dark transition-colors duration-500">
+                    <p className="font-sans text-base md:text-lg text-white/90 italic leading-relaxed mb-6 group-hover:text-dark transition-colors duration-500">
                       "{testimonial.quote}"
                     </p>
                     <div className="flex items-center gap-3">
