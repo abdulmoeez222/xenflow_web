@@ -887,10 +887,10 @@ export default function Home() {
             <div>
               <p className="font-mono text-gray-500 text-xs tracking-widest uppercase mb-8">[ CONNECT ]</p>
               <ul className="space-y-4 font-mono text-sm uppercase tracking-wider">
-                <li><a href="#" className="hover:text-primary transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">X (Twitter)</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Instagram</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">WhatsApp</a></li>
+                <li><a href="https://www.linkedin.com/feed/update/urn:li:activity:7427690910181675008" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a></li>
+                <li><a href="https://x.com/Xenflowtech" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">X (Twitter)</a></li>
+                <li><a href="https://www.instagram.com/xenflow.tech/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Instagram</a></li>
+                <li><a href="https://wa.me/923274550477" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">WhatsApp</a></li>
               </ul>
             </div>
 
