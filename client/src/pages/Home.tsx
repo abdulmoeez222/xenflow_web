@@ -82,7 +82,7 @@ export default function Home() {
       <FloatingChatbot />
 
       {/* Hero Section */}
-      <section ref={scrollRef} className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden pt-32 md:pt-20">
+      <section ref={scrollRef} className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden pt-48 md:pt-56">
         <FloatingShape className="w-[500px] h-[500px] top-[-100px] left-[-100px] bg-primary/20" delay={0} duration={15} />
         <FloatingShape className="w-[300px] h-[300px] bottom-0 right-[-50px] bg-blue-600/20" delay={2} duration={12} />
 
@@ -105,7 +105,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-6xl md:text-9xl font-heading font-extrabold tracking-tighter mb-8 leading-tight uppercase"
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-heading font-extrabold tracking-tighter mb-8 leading-tight uppercase text-white"
           >
             24/7 LEAD
             <br />
