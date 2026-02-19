@@ -12,23 +12,38 @@ export function FloatingChatbot() {
     ]);
     const [inputValue, setInputValue] = useState("");
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!inputValue.trim()) return;
 
-        // Add user message
-        setMessages([...messages, { type: "user", text: inputValue }]);
+        const userMessage = inputValue;
+        setMessages((prev) => [...prev, { type: "user", text: userMessage }]);
         setInputValue("");
 
-        // Simulate bot response (no backend for now)
-        setTimeout(() => {
+        try {
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userMessage }),
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                setMessages((prev) => [
+                    ...prev,
+                    { type: "bot", text: data.message },
+                ]);
+            } else {
+                throw new Error("Failed to get response");
+            }
+        } catch (error) {
             setMessages((prev) => [
                 ...prev,
                 {
                     type: "bot",
-                    text: "Thanks for your message! Our team will get back to you soon.",
+                    text: "Sorry, I'm having trouble connecting right now. Please try again later.",
                 },
             ]);
-        }, 1000);
+        }
     };
 
     return (

@@ -18,16 +18,16 @@ export function ServiceCard({ title, description, icon: Icon, index }: ServiceCa
       className="group relative p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-primary/50 transition-colors duration-300"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-      
+
       <div className="relative z-10">
         <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300">
           <Icon className="w-6 h-6 text-primary" />
         </div>
-        
-        <h3 className="text-xl font-bold font-mono text-white mb-3 group-hover:text-primary transition-colors duration-300">
+
+        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors duration-300">
           {title}
         </h3>
-        
+
         <p className="text-muted-foreground leading-relaxed">
           {description}
         </p>
