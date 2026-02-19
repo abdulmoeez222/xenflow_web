@@ -7,9 +7,14 @@ import {
 
 export interface IStorage {
   createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
+  isConfigured(): boolean;
 }
 
 export class DatabaseStorage implements IStorage {
+  isConfigured(): boolean {
+    return !!db;
+  }
+
   async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
     if (!db) {
       throw new Error("Database not configured. Please set DATABASE_URL environment variable.");

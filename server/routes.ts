@@ -34,17 +34,36 @@ export async function registerRoutes(
         }
       }
 
-      // 2. Always save to local storage (Drizzle) for redundancy
-      const message = await storage.createContactMessage(input);
-      res.json(message);
+      // 2. Try to save to local storage (Drizzle) if configured
+      try {
+        if (storage.isConfigured()) {
+          await storage.createContactMessage(input);
+          console.log('✅ Contact saved to local database');
+        } else {
+          console.warn('⚠️ Local database not configured, skipping local save');
+          // If we have Supabase but no local DB, we still succeed
+          if (!supabase) {
+            throw new Error("No storage providers (Supabase or Local DB) are configured");
+          }
+        }
+      } catch (dbErr) {
+        console.error('Local storage error:', dbErr);
+        // Only fail if we didn't succeed with Supabase
+        if (!supabase) {
+          throw dbErr;
+        }
+      }
+
+      res.json({ success: true, message: "Thank you for your message! We will get back to you soon." });
     } catch (err) {
+      console.error('Contact Form Error:', err);
       if (err instanceof z.ZodError) {
         return res.status(400).json({
           message: err.errors[0].message,
           field: err.errors[0].path.join('.'),
         });
       }
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: err instanceof Error ? err.message : "Internal server error" });
     }
   });
 
