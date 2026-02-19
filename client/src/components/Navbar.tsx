@@ -18,11 +18,14 @@ export function Navbar() {
     <header className="fixed top-6 left-0 right-0 z-50 px-6">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-8 py-4 glass-card rounded-full border border-white/10 shadow-2xl">
         {/* Left: Logo */}
-        <Link href="/" className="flex items-center cursor-pointer group">
+        <div
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex items-center cursor-pointer group"
+        >
           <span className="font-mono text-2xl font-bold tracking-tighter text-white">
             XEN<span className="text-primary group-hover:neon-glow transition-all duration-300">FLOW</span>
           </span>
-        </Link>
+        </div>
 
         {/* Center: Desktop Nav */}
         <div className="hidden md:flex items-center space-x-10">
