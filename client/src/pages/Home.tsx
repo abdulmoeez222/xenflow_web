@@ -139,26 +139,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Marquee Section */}
-      <div className="w-full py-12 border-y border-white/5 bg-black/50 backdrop-blur-sm overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-          <p className="text-center text-sm font-mono text-muted-foreground mb-8 uppercase tracking-widest">
-            Trusted by innovators worldwide
-          </p>
-          <div className="relative flex overflow-x-hidden group">
-            <div className="animate-marquee whitespace-nowrap flex space-x-12 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-              {/* Repeated logos for marquee effect */}
-              {[...Array(2)].map((_, i) => (
-                <div key={i} className="flex space-x-24">
-                  {["NVIDIA", "OPENAI", "MICROSOFT", "GOOGLE", "AMAZON", "META", "IBM"].map((partner) => (
-                    <span key={partner} className="text-2xl font-bold font-mono text-white/40">{partner}</span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+
 
       {/* Services Section */}
       <section id="services" className="py-32 relative">
