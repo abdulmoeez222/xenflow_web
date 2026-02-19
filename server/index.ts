@@ -89,7 +89,6 @@ app.use((req, res, next) => {
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  export { app, httpServer };
 
   // Start the server if not running in a serverless environment
   if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
@@ -98,5 +97,7 @@ app.use((req, res, next) => {
       log(`serving on port ${port}`);
     });
   }
+})();
 
-  export default app;
+export { app, httpServer };
+export default app;
