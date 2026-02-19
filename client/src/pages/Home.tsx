@@ -689,7 +689,7 @@ export default function Home() {
                     marginTop: index % 2 === 0 ? '0px' : '80px'
                   }}
                 >
-                  <div className="group bg-black p-6 rounded-[24px] h-full transition-all duration-500 hover:bg-primary hover:scale-105 cursor-pointer border border-white/5 flex flex-col justify-between">
+                  <div className="group bg-black p-8 rounded-[32px] h-[380px] transition-all duration-500 hover:bg-primary hover:scale-105 cursor-pointer border border-white/5 flex flex-col justify-between">
                     <p className="font-sans text-base md:text-lg text-white/90 italic leading-relaxed mb-6 group-hover:text-dark transition-colors duration-500">
                       "{testimonial.quote}"
                     </p>
@@ -766,7 +766,7 @@ export default function Home() {
                     marginTop: index % 2 === 0 ? '0px' : '80px'
                   }}
                 >
-                  <div className="group bg-black p-6 rounded-[24px] h-full transition-all duration-500 hover:bg-primary hover:scale-105 cursor-pointer border border-white/5 flex flex-col justify-between">
+                  <div className="group bg-black p-8 rounded-[32px] h-[380px] transition-all duration-500 hover:bg-primary hover:scale-105 cursor-pointer border border-white/5 flex flex-col justify-between">
                     <p className="font-sans text-base md:text-lg text-white/90 italic leading-relaxed mb-6 group-hover:text-dark transition-colors duration-500">
                       "{testimonial.quote}"
                     </p>
