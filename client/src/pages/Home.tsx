@@ -183,6 +183,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Tech Stack Marquee Section */}
+      <section id="tech" className="w-full py-12 border-y border-white/5 bg-black/50 backdrop-blur-sm overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-center text-sm font-mono text-muted-foreground mb-8 uppercase tracking-widest">
+            Our Technology Stack
+          </p>
+          <div className="relative flex overflow-x-hidden group">
+            <div className="animate-marquee whitespace-nowrap flex space-x-12 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="flex space-x-24">
+                  {[
+                    { name: "React", icon: "⚛️" },
+                    { name: "Node.js", icon: "🟢" },
+                    { name: "Python", icon: "🐍" },
+                    { name: "TypeScript", icon: "📘" },
+                    { name: "MongoDB", icon: "🍃" },
+                    { name: "PostgreSQL", icon: "🐘" },
+                    { name: "AWS", icon: "☁️" },
+                    { name: "Docker", icon: "🐳" },
+                    { name: "Kubernetes", icon: "⚓" },
+                    { name: "OpenAI", icon: "🤖" },
+                    { name: "TensorFlow", icon: "🧠" },
+                    { name: "Next.js", icon: "▲" },
+                    { name: "n8n", icon: "🔄" },
+                    { name: "Zapier", icon: "⚡" },
+                    { name: "Make.com", icon: "🔧" }
+                  ].map((tech) => (
+                    <span key={tech.name} className="text-2xl font-bold font-mono text-white/40 flex items-center gap-4">
+                      <span>{tech.icon}</span> {tech.name}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Feature Section */}
       <section className="py-32 relative overflow-hidden bg-white/[0.02]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
