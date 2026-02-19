@@ -914,7 +914,7 @@ export default function Home() {
             <div>
               <p className="font-mono text-gray-500 text-xs tracking-widest uppercase mb-8">[ QUICK LINKS ]</p>
               <ul className="space-y-4 font-mono text-sm uppercase tracking-wider">
-                <li><a href="#work" className="hover:text-primary transition-colors">Work</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-primary transition-colors">Home</a></li>
                 <li><a href="#services" className="hover:text-primary transition-colors">Services</a></li>
                 <li><a href="#case-studies" className="hover:text-primary transition-colors">Case Studies</a></li>
                 <li><a href="#contact" className="hover:text-primary transition-colors">Book a Demo</a></li>
