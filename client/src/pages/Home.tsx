@@ -817,6 +817,7 @@ export default function Home() {
                         <Input
                           placeholder="Phone / WhatsApp"
                           {...field}
+                          value={field.value ?? ""}
                           className="bg-white/5 border-white/10 focus:border-primary/50 min-h-[50px] text-lg"
                         />
                       </FormControl>
