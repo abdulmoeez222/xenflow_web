@@ -104,7 +104,7 @@ export function FloatingChatbot() {
                 </motion.button>
             </motion.div>
 
-            {/* Chat Window */}
+            {/* Chat Window - constrained below nav, responsive width, safe on all viewports */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -112,29 +112,37 @@ export function FloatingChatbot() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="fixed bottom-28 right-6 w-[380px] h-[500px] bg-black border border-white/20 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+                        className="fixed right-3 sm:right-6 top-[7rem] bottom-20 w-[calc(100vw-1.5rem)] max-w-[380px] min-h-[280px] max-h-[calc(100vh-7rem-5rem)] bg-black border border-white/20 rounded-2xl shadow-2xl z-40 flex flex-col overflow-hidden"
                     >
-                        {/* Header */}
-                        <div className="bg-gradient-to-r from-primary to-red-600 p-4 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                        {/* Header - compact */}
+                        <div className="flex-shrink-0 bg-gradient-to-r from-primary to-red-600 px-3 py-2.5 sm:p-4 flex items-center gap-2 sm:gap-3">
+                            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
                                 <img
                                     src="/chatbot-icon.png"
                                     alt="Chatbot"
-                                    className="w-8 h-8 object-contain"
+                                    className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
                                     onError={(e) => {
                                         e.currentTarget.style.display = 'none';
                                         e.currentTarget.parentElement!.innerHTML = '🤖';
                                     }}
                                 />
                             </div>
-                            <div>
-                                <h3 className="font-bold text-white">Xenflow Assistant</h3>
+                            <div className="min-w-0 flex-1">
+                                <h3 className="font-bold text-white text-sm sm:text-base truncate">Xenflow Assistant</h3>
                                 <p className="text-xs text-white/80">Online</p>
                             </div>
+                            <button
+                                type="button"
+                                onClick={() => setIsOpen(false)}
+                                className="sm:hidden flex-shrink-0 w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                                aria-label="Close chat"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
 
-                        {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {/* Messages - scrollable */}
+                        <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
                             {messages.map((message, index) => (
                                 <motion.div
                                     key={index}
@@ -156,8 +164,8 @@ export function FloatingChatbot() {
                             ))}
                         </div>
 
-                        {/* Input */}
-                        <div className="p-4 border-t border-white/10">
+                        {/* Input - fixed at bottom */}
+                        <div className="flex-shrink-0 p-3 sm:p-4 border-t border-white/10 bg-black">
                             <div className="flex gap-2">
                                 <input
                                     type="text"

@@ -81,8 +81,8 @@ export default function Home() {
       <Navbar />
       <FloatingChatbot />
 
-      {/* Hero Section */}
-      <section ref={scrollRef} className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden pt-48 md:pt-56">
+      {/* Hero Section - compact spacing so CTAs stay fully visible on all viewports */}
+      <section ref={scrollRef} className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24">
         <FloatingShape className="w-[500px] h-[500px] top-[-100px] left-[-100px] bg-primary/20" delay={0} duration={15} />
         <FloatingShape className="w-[300px] h-[300px] bottom-0 right-[-50px] bg-blue-600/20" delay={2} duration={12} />
 
@@ -94,9 +94,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-6 inline-block"
+            className="mb-3 sm:mb-5 md:mb-6 inline-block"
           >
-            <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-sans font-medium tracking-widest uppercase">
+            <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs sm:text-sm font-sans font-medium tracking-widest uppercase">
               Never Miss a Lead Again
             </span>
           </motion.div>
@@ -105,7 +105,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-heading font-extrabold tracking-tighter mb-8 leading-tight uppercase text-white"
+            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-extrabold tracking-tighter mb-4 sm:mb-6 md:mb-8 leading-tight uppercase text-white"
           >
             24/7 LEAD
             <br />
@@ -114,13 +114,11 @@ export default function Home() {
             </span>
           </motion.h1>
 
-
-
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="max-w-2xl mx-auto text-xl text-muted-foreground mb-12 leading-relaxed"
+            className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 md:mb-10 leading-relaxed"
           >
             AI-powered chatbots and voice agents that qualify leads, book appointments, and close deals while you sleep. Your business runs 24/7. Now your sales system does too.
           </motion.p>
@@ -129,14 +127,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
           >
             <a href="#contact">
-              <Button size="lg" className="bg-primary hover:bg-primary/80 text-white rounded-full px-8 py-6 text-lg w-full sm:w-auto neon-glow">
+              <Button size="lg" className="bg-primary hover:bg-primary/80 text-white rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto neon-glow">
                 Book a Free Demo
               </Button>
             </a>
-            <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-lg w-full sm:w-auto hover:bg-white/5 border-white/10">
+            <Button variant="outline" size="lg" className="rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto hover:bg-white/5 border-white/10">
               See How It Works
             </Button>
           </motion.div>
@@ -664,7 +662,7 @@ export default function Home() {
                   name: "Fatima Hassan",
                   role: "OPERATIONS DIRECTOR",
                   company: "ELITE PROPERTY GROUP",
-                  image: "/client3.jpeg"
+                  image: "/Fatima_Hassan.jpeg"
                 },
                 {
                   quote: "The seamless integration with our CRM was a game-changer. Every lead is tracked, tagged, and followed up automatically.",
@@ -700,7 +698,7 @@ export default function Home() {
                   name: "Fatima Hassan",
                   role: "OPERATIONS DIRECTOR",
                   company: "ELITE PROPERTY GROUP",
-                  image: "/client3.jpeg"
+                  image: "/client1.jpeg"
                 },
                 {
                   quote: "The seamless integration with our CRM was a game-changer. Every lead is tracked, tagged, and followed up automatically.",
