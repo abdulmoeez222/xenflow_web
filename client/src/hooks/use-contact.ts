@@ -14,12 +14,21 @@ export function useCreateContact() {
         body: JSON.stringify(data),
       });
 
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Failed to send message");
+      let body: unknown;
+      try {
+        body = await res.json();
+      } catch {
+        throw new Error(res.ok ? "Invalid response from server" : `Request failed: ${res.status} ${res.statusText}`);
       }
 
-      return api.contact.create.responses[200].parse(await res.json());
+      if (!res.ok) {
+        const msg = body && typeof body === "object" && "message" in body && typeof (body as { message: unknown }).message === "string"
+          ? (body as { message: string }).message
+          : `Request failed: ${res.status} ${res.statusText}`;
+        throw new Error(msg);
+      }
+
+      return api.contact.create.responses[200].parse(body);
     },
     onSuccess: () => {
       toast({
