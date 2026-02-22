@@ -7,12 +7,12 @@
       "config": { "distDir": "dist/public" }
     },
     {
-      "src": "dist/index.cjs",
+      "src": "api/index.cjs",
       "use": "@vercel/node"
     }
   ],
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/dist/index.cjs" },
+    { "source": "/api/:path*", "destination": "/api/index" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

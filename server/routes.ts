@@ -10,8 +10,7 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // Contact Form Endpoint
-  app.post(api.contact.create.path, async (req, res) => {
+  const contactHandler = async (req: import("express").Request, res: import("express").Response) => {
     try {
       const body = req.body ?? {};
       const input = api.contact.create.input.parse(body);
@@ -63,7 +62,10 @@ export async function registerRoutes(
         message: "Thank you for your message! We will get back to you soon.",
       });
     }
-  });
+  };
+
+  app.post(api.contact.create.path, contactHandler);
+  app.post("/api/index", contactHandler);
 
   // Booking Form Endpoint (from xenflow_web)
   app.post('/api/booking', async (req, res) => {

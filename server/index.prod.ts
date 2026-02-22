@@ -18,6 +18,15 @@ declare module "http" {
   }
 }
 
+// When Vercel rewrites /api/contact -> /api/index, restore path so Express routes match
+app.use((req, _res, next) => {
+  const original = (req as Request & { headers: Record<string, string> }).headers["x-vercel-original-url"] || (req as Request & { headers: Record<string, string> }).headers["x-original-url"];
+  if (original && (req.url === "/api/index" || req.url?.startsWith("/api/index?"))) {
+    req.url = original + (req.url.includes("?") ? "?" + req.url.split("?")[1] : "");
+  }
+  next();
+});
+
 app.use(
   express.json({
     verify: (req, _res, buf) => {
@@ -72,7 +81,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     return next(err);
   }
 
-  if (req.path === "/api/contact") {
+  if (req.path === "/api/contact" || req.path === "/api/index") {
     return res.status(200).json({ success: true, message: "Thank you for your message! We will get back to you soon." });
   }
 
@@ -98,7 +107,7 @@ ready.catch((err) => {
 export { app, httpServer };
 export default (req: Request, res: Response) => {
   const path = (req as { url?: string }).url?.split("?")[0] ?? "";
-  const isContact = path === "/api/contact";
+  const isContact = path === "/api/contact" || path === "/api/index";
   return ready
     .then((a) => a(req, res))
     .catch((err) => {

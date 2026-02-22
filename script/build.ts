@@ -1,6 +1,8 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
-import { rm, readFile } from "fs/promises";
+import { rm, readFile, mkdir, copyFile } from "fs/promises";
+import { existsSync } from "fs";
+import path from "path";
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -46,6 +48,9 @@ async function buildAll() {
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
 
+  const apiDir = path.join(process.cwd(), "api");
+  if (!existsSync(apiDir)) await mkdir(apiDir, { recursive: true });
+
   await esbuild({
     entryPoints: ["server/index.prod.ts"],
     platform: "node",
@@ -59,6 +64,8 @@ async function buildAll() {
     external: externals,
     logLevel: "info",
   });
+
+  await copyFile("dist/index.cjs", path.join(apiDir, "index.cjs"));
 }
 
 buildAll().catch((err) => {
