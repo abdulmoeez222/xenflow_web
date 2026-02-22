@@ -78,23 +78,24 @@ app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
   return res.status(status).json({ message });
 });
 
-async function start() {
+const ready = (async () => {
   await registerRoutes(httpServer, app);
-
   serveStatic(app);
-
   if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
     const port = parseInt(process.env.PORT || "5000", 10);
-    httpServer.listen(port, "0.0.0.0", () => {
-      log(`serving on port ${port}`);
-    });
+    httpServer.listen(port, "0.0.0.0", () => log(`serving on port ${port}`));
   }
-}
+  return app;
+})();
 
-start().catch((err) => {
+ready.catch((err) => {
   console.error(err);
   process.exit(1);
 });
 
 export { app, httpServer };
-export default app;
+export default (req: Request, res: Response) =>
+  ready.then((a) => a(req, res)).catch((err) => {
+    console.error(err);
+    if (!res.headersSent) res.status(500).json({ message: err instanceof Error ? err.message : "Internal server error" });
+  });

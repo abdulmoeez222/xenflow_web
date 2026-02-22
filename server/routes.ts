@@ -13,7 +13,8 @@ export async function registerRoutes(
   // Contact Form Endpoint
   app.post(api.contact.create.path, async (req, res) => {
     try {
-      const input = api.contact.create.input.parse(req.body);
+      const body = req.body ?? {};
+      const input = api.contact.create.input.parse(body);
 
       let saved = false;
 
