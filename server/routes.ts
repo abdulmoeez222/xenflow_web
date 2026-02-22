@@ -15,43 +15,44 @@ export async function registerRoutes(
     try {
       const input = api.contact.create.input.parse(req.body);
 
+      let saved = false;
+
       // 1. Try Supabase if available
       if (supabase) {
-        const { error } = await supabase
-          .from('contacts')
-          .insert([{
-            name: input.name,
-            email: input.email,
-            company: (input as any).company || null,
-            message: input.message,
-            timestamp: new Date().toISOString()
-          }]);
+        const row = {
+          name: input.name,
+          email: input.email,
+          company: (input as { company?: string }).company ?? null,
+          message: input.message,
+          phone: (input as { phone?: string }).phone ?? null,
+        };
+
+        const { error } = await supabase.from('contacts').insert([row]);
 
         if (error) {
           console.error('Supabase error:', error);
         } else {
+          saved = true;
           console.log('✅ Contact saved to Supabase');
         }
       }
 
-      // 2. Try to save to local storage (Drizzle) if configured
-      try {
-        if (storage.isConfigured()) {
+      // 2. Try local storage (Drizzle) if configured
+      if (storage.isConfigured()) {
+        try {
           await storage.createContactMessage(input);
+          saved = true;
           console.log('✅ Contact saved to local database');
-        } else {
-          console.warn('⚠️ Local database not configured, skipping local save');
-          // If we have Supabase but no local DB, we still succeed
-          if (!supabase) {
-            throw new Error("No storage providers (Supabase or Local DB) are configured");
-          }
+        } catch (dbErr) {
+          console.error('Local storage error:', dbErr);
+          if (!saved) throw dbErr;
         }
-      } catch (dbErr) {
-        console.error('Local storage error:', dbErr);
-        // Only fail if we didn't succeed with Supabase
-        if (!supabase) {
-          throw dbErr;
-        }
+      }
+
+      if (!saved) {
+        return res.status(503).json({
+          message: "Contact form is not fully configured. Please set SUPABASE_URL and SUPABASE_ANON_KEY in your deployment.",
+        });
       }
 
       res.json({ success: true, message: "Thank you for your message! We will get back to you soon." });
