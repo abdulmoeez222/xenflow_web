@@ -2,6 +2,10 @@
     "version": 2,
     "builds": [
         {
+            "src": "api/contact.ts",
+            "use": "@vercel/node"
+        },
+        {
             "src": "server/index.prod.ts",
             "use": "@vercel/node"
         },
