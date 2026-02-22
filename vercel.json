@@ -15,7 +15,11 @@
     ],
     "rewrites": [
         {
-            "source": "/api/(.*)",
+            "source": "/api/booking",
+            "destination": "server/index.prod.ts"
+        },
+        {
+            "source": "/api/chat",
             "destination": "server/index.prod.ts"
         },
         {
