@@ -23,7 +23,7 @@
             "destination": "server/index.prod.ts"
         },
         {
-            "source": "/(.*)",
+            "source": "/((?!api/).*)",
             "destination": "/index.html"
         }
     ]
