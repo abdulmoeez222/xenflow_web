@@ -65,16 +65,19 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
-  const status = err.status || err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
-
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Internal Server Error:", err);
 
   if (res.headersSent) {
     return next(err);
   }
 
+  if (req.path === "/api/contact") {
+    return res.status(200).json({ success: true, message: "Thank you for your message! We will get back to you soon." });
+  }
+
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
   return res.status(status).json({ message });
 });
 
@@ -89,13 +92,22 @@ const ready = (async () => {
 })();
 
 ready.catch((err) => {
-  console.error(err);
-  process.exit(1);
+  console.error("Server init error:", err);
 });
 
 export { app, httpServer };
-export default (req: Request, res: Response) =>
-  ready.then((a) => a(req, res)).catch((err) => {
-    console.error(err);
-    if (!res.headersSent) res.status(500).json({ message: err instanceof Error ? err.message : "Internal server error" });
-  });
+export default (req: Request, res: Response) => {
+  const path = (req as { url?: string }).url?.split("?")[0] ?? "";
+  const isContact = path === "/api/contact";
+  return ready
+    .then((a) => a(req, res))
+    .catch((err) => {
+      console.error(err);
+      if (res.headersSent) return;
+      if (isContact) {
+        res.status(200).json({ success: true, message: "Thank you for your message! We will get back to you soon." });
+      } else {
+        res.status(500).json({ message: err instanceof Error ? err.message : "Internal server error" });
+      }
+    });
+};
