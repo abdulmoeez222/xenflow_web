@@ -354,7 +354,7 @@ export default function Home() {
               { name: "Omer Farooq", role: "AI & Automation Lead", img: "/omer.png", desc: "Chatbot architecture and conversation design" },
               { name: "Saad Ahmed", role: "Voice Systems Engineer", img: "/saad.png", desc: "Natural language processing and voice AI" },
               { name: "Hashim Sultan", role: "Integration Specialist", img: "/hashim.png", desc: "CRM connections and workflow automation" },
-              { name: "Ibrahim Zahid", role: "Client Success", img: "/hashim.png", desc: "Onboarding and optimization" }
+              { name: "Ibrahim Zahid", role: "Client Success", img: "/Ibrahim.jpeg", desc: "Onboarding and optimization" }
             ].map((member, i) => (
               <motion.div
                 key={member.name}
