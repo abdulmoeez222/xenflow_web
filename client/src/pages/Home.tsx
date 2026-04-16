@@ -10,11 +10,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertContactMessageSchema, type InsertContactMessage } from "@shared/schema";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Bot, Phone, MessageCircle, CheckCircle, Calendar, Database } from "lucide-react";
+import { Code2, Globe, Zap, Puzzle, Megaphone, Brain } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRef } from "react";
-import { Globe as GlobeComponent } from "@/components/Globe";
 import { FloatingChatbot } from "@/components/FloatingChatbot";
-import { DashboardPreview } from "@/components/DashboardPreview";
 
 export default function Home() {
   const scrollRef = useRef(null);
@@ -45,46 +44,47 @@ export default function Home() {
 
   const services = [
     {
-      title: "AI Chatbots",
-      description: "Instant responses to every inquiry. Qualifies leads with smart questions. Books appointments automatically. No forms. No delays. No excuses.",
-      icon: Bot,
+      title: "Software Development",
+      description: "Custom software built for your business workflows — from desktop tools to full-scale enterprise systems. Scalable, maintainable, and engineered to last.",
+      icon: Code2,
     },
     {
-      title: "Voice Agents",
-      description: "Answers every call, day or night. Handles questions, qualifies prospects, schedules appointments. Sounds human. Works like a machine.",
-      icon: Phone,
+      title: "Web Development",
+      description: "We craft both immersive 3D interactive web experiences and high-performance static sites. From Three.js-powered visuals to lightning-fast landing pages.",
+      icon: Globe,
     },
     {
-      title: "WhatsApp Automation",
-      description: "Meet customers where they already are. Automated conversations that feel personal. From first message to booked appointment, completely hands-free.",
-      icon: MessageCircle,
+      title: "AI Automation",
+      description: "End-to-end workflow automation using n8n, LangChain, or custom-built pipelines. We identify bottlenecks in your operations and eliminate them with AI.",
+      icon: Zap,
     },
     {
-      title: "Lead Qualification",
-      description: "Stop chasing tire-kickers. Our AI identifies serious buyers in seconds. Only qualified leads reach your team. Your time stays valuable.",
-      icon: CheckCircle,
+      title: "Custom Solutions",
+      description: "No template fits your problem? We build from scratch. Bespoke tools, integrations, and systems precisely engineered around your unique requirements.",
+      icon: Puzzle,
     },
     {
-      title: "Smart Scheduling",
-      description: "Syncs with your calendar in real-time. Clients book themselves. Reminders sent automatically. No-shows cut in half.",
-      icon: Calendar,
+      title: "Marketing",
+      description: "Full-spectrum digital marketing: paid ads (Meta, Google), technical SEO, and next-gen GEO (Generative Engine Optimization) to rank in AI search results.",
+      icon: Megaphone,
     },
     {
-      title: "Seamless Integration",
-      description: "Plugs into your CRM, calendar, and communication tools. Every lead tracked. Every conversation logged. Nothing falls through the cracks.",
-      icon: Database,
+      title: "AI Systems",
+      description: "Production-grade ML models, voice calling agents, autonomous AI chatbots, and fully automated chatbot generation tools — built and deployed end to end.",
+      icon: Brain,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden selection:bg-primary/30">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white overflow-x-hidden">
       <Navbar />
       <FloatingChatbot />
 
       {/* Hero Section - compact spacing so CTAs stay fully visible on all viewports */}
-      <section ref={scrollRef} className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24">
-        <FloatingShape className="w-[500px] h-[500px] top-[-100px] left-[-100px] bg-primary/20" delay={0} duration={15} />
-        <FloatingShape className="w-[300px] h-[300px] bottom-0 right-[-50px] bg-blue-600/20" delay={2} duration={12} />
+      <section id="home" ref={scrollRef} className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden pt-32 sm:pt-40 md:pt-48 pb-16 sm:pb-20 md:pb-24">
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-black/10 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-black/10 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
         <motion.div
           style={{ y: heroY, opacity }}
@@ -97,7 +97,7 @@ export default function Home() {
             className="mb-3 sm:mb-5 md:mb-6 inline-block"
           >
             <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs sm:text-sm font-sans font-medium tracking-widest uppercase">
-              Never Miss a Lead Again
+              Custom Tailored Solutions
             </span>
           </motion.div>
 
@@ -105,12 +105,11 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-extrabold tracking-tighter mb-4 sm:mb-6 md:mb-8 leading-tight uppercase text-white"
+            className="text-[32px] md:text-[48px] font-heading font-bold leading-[1.1] text-[#111827] mb-4 sm:mb-6 md:mb-8 uppercase flex flex-col items-center justify-center text-center"
           >
-            24/7 LEAD
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-500">
-              CAPTURE
+            <span>SYSTEMS THAT</span>
+            <span className="text-[#111827]">
+              SAVE TIME & MONEY
             </span>
           </motion.h1>
 
@@ -118,9 +117,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 md:mb-10 leading-relaxed"
+            className="max-w-3xl mx-auto text-[15px] font-sans font-normal leading-[25.5px] text-[#4B5563] mb-6 sm:mb-8 md:mb-10 text-center"
           >
-            AI-powered chatbots and voice agents that qualify leads, book appointments, and close deals while you sleep. Your business runs 24/7. Now your sales system does too.
+            Whether you need a full digital marketing strategy to increase sales, or robust POS systems paired with seamless workflow automations. We build custom solutions tailored to your exact needs to streamline processes, save you time, and put your growth on autopilot.
           </motion.p>
 
           <motion.div
@@ -129,13 +128,13 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
           >
-            <a href="#contact">
-              <Button size="lg" className="bg-primary hover:bg-primary/80 text-white rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto neon-glow">
-                Book a Free Demo
+            <a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              <Button size="lg" className="rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto btn-shiny-black">
+                Start a Project
               </Button>
             </a>
-            <Button variant="outline" size="lg" className="rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto hover:bg-white/5 border-white/10">
-              See How It Works
+            <Button variant="outline" size="lg" onClick={() => { const el = document.getElementById('projects'); if(el) el.scrollIntoView({ behavior: 'smooth' }); }} className="rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto hover:bg-background/5 border-black/10">
+              View Our Work
             </Button>
           </motion.div>
         </motion.div>
@@ -144,18 +143,19 @@ export default function Home() {
 
 
       {/* Services Section */}
-      <section id="services" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="services" className="py-32 relative bg-background">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-4">The System That Never Sleeps</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto font-sans font-medium uppercase tracking-widest text-sm text-primary">
-              Core Capabilities
+            <p className="text-primary font-sans font-medium text-xs tracking-[0.3em] uppercase mb-4">
+              [ WHAT WE BUILD ]
             </p>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-4">Services Built for the Real World</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -168,121 +168,10 @@ export default function Home() {
 
 
 
-      {/* The Problem We Solve Section */}
-      <section id="solutions" className="py-32 relative overflow-hidden bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-6 leading-tight">
-                While You're Closed, <br />
-                <span className="text-primary">Your Competitors Are Closing</span>
-              </h2>
-              <div className="space-y-6 text-lg text-muted-foreground leading-relaxed mb-8">
-                <p>Every missed call is money walking out the door.</p>
-                <p>Every inquiry waiting until morning is already talking to three other businesses.</p>
-                <p>Every lead that hits voicemail? Gone.</p>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12">
-                {[
-                  { label: "Average business misses", value: "30% of calls" },
-                  { label: "Customers buy from whoever responds first", value: "78%" },
-                  { label: "After-hours inquiries convert", value: "2x higher" }
-                ].map((stat, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="p-6 glass-card rounded-2xl border-white/5"
-                  >
-                    <div className="text-2xl font-bold text-primary mb-1">{stat.value}</div>
-                    <div className="text-xs uppercase tracking-widest font-sans font-medium text-gray-500">{stat.label}</div>
-                  </motion.div>
-                ))}
-              </div>
-
-              <p className="mt-12 text-xl font-heading font-bold tracking-tight">
-                You're not just losing leads. <br />
-                <span className="text-primary">You're funding your competition.</span>
-              </p>
-              <p className="mt-4 text-muted-foreground italic underline decoration-primary/30">Xenflow fixes this.</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative aspect-video flex items-center justify-center"
-            >
-              <DashboardPreview />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-32 relative border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <p className="font-sans font-medium text-primary text-xs tracking-[0.4em] mb-4 uppercase">[ HOW IT WORKS ]</p>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight uppercase">Pure Automation at Scale</h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                step: "01",
-                title: "24/7 Lead Capture",
-                desc: "Never miss an inquiry. Ever. Chat, voice, WhatsApp—we handle them all."
-              },
-              {
-                step: "02",
-                title: "Instant Qualification",
-                desc: "Smart questions identify serious buyers in under 60 seconds."
-              },
-              {
-                step: "03",
-                title: "Automatic Booking",
-                desc: "Appointments scheduled directly into your calendar. Confirmations sent. Reminders automated."
-              },
-              {
-                step: "04",
-                title: "Seamless Handoff",
-                desc: "When you're ready to close, every detail is waiting. No context-switching. Just results."
-              }
-            ].map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-black/40 border border-white/5 p-8 rounded-3xl hover:border-primary/50 transition-all duration-300 group"
-              >
-                <div className="text-4xl font-heading font-bold text-white/10 mb-6 group-hover:text-primary/20 transition-colors">{step.step}</div>
-                <h3 className="text-xl font-heading font-bold mb-4 uppercase">{step.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Founder Section */}
-      <section id="about" className="py-32 relative border-t border-white/5 bg-black/40">
+      <section id="about" className="py-32 relative border-t border-black/5 bg-secondary/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div
@@ -296,9 +185,9 @@ export default function Home() {
                 alt="Abdul Moeez - Founder"
                 className="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
               <div className="absolute bottom-8 left-8">
-                <p className="font-sans font-medium text-primary text-sm mb-2 tracking-widest uppercase">[ FOUNDER & CEO ]</p>
+                <p className="font-sans font-medium text-primary text-sm mb-2 tracking-widest uppercase">[ FOUNDER ]</p>
                 <h3 className="text-3xl font-extrabold tracking-headline">Abdul Moeez</h3>
               </div>
             </motion.div>
@@ -314,17 +203,17 @@ export default function Home() {
                 <span className="text-primary">One Solution.</span>
               </h2>
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-                <p>
-                  "I watched businesses lose $10K+ monthly because nobody picked up the phone at 8 PM."
+                <p className="font-bold italic text-black">
+                  "We believe that true growth shouldn't be bottlenecked by outdated systems or disjointed marketing."
                 </p>
                 <p>
-                  After working with real estate agencies, medical clinics, and service businesses across the US, UK, UAE, and Pakistan, the pattern was obvious:
+                  Working with businesses globally, the pattern is obvious: companies struggle when they lack cohesive ecosystems. Without a unified digital presence, targeted marketing, and smooth internal processes, they bleed time and money.
                 </p>
                 <p>
-                  Great businesses. Terrible response times. Leads contact 10 companies simultaneously. First one to respond wins. Everyone else loses.
+                  Xenflow was built to solve this. We engineer custom solutions tailored exactly to your needs. If you lack a website and need a full-scale marketing strategy to guarantee sales, we deliver the complete solution.
                 </p>
                 <p>
-                  Xenflow was built to solve this. We don't build chatbots. We build revenue capture systems. AI that responds in seconds, qualifies in minutes, and books automatically.
+                  Beyond marketing, we implement robust POS systems and integrate them with seamless workflow automations to streamline your operations. We put your business on autopilot so you can focus on scaling.
                 </p>
               </div>
               <div className="mt-10 flex items-center space-x-6">
@@ -337,7 +226,7 @@ export default function Home() {
       </section>
 
       {/* Team Section */}
-      <section id="team" className="py-32 relative">
+      <section id="team" className="py-32 relative bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -345,16 +234,36 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ OUR TEAM ]</p>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight uppercase">The People Behind Xenflow</h2>
+            <p className="font-sans font-medium text-white/50 text-xs tracking-[0.3em] mb-4 uppercase">[ OUR TEAM ]</p>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight uppercase text-white">The People Behind Xenflow</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { name: "Omer Farooq", role: "AI & Automation Lead", img: "/omer.png", desc: "Chatbot architecture and conversation design" },
-              { name: "Saad Ahmed", role: "Voice Systems Engineer", img: "/saad.png", desc: "Natural language processing and voice AI" },
-              { name: "Hashim Sultan", role: "Integration Specialist", img: "/hashim.png", desc: "CRM connections and workflow automation" },
-              { name: "Ibrahim Zahid", role: "Client Success", img: "/Ibrahim.jpeg", desc: "Onboarding and optimization" }
+              {
+                name: "Abdul Moeez",
+                role: "Founder",
+                img: "/moiz.png",
+                desc: "Visionary behind Xenflow. Drives strategy, product direction, and client relationships."
+              },
+              {
+                name: "Saad Ahmed",
+                role: "Project Manager",
+                img: "/saad.png",
+                desc: "Keeps every project on track — from kickoff to delivery, on time and on scope."
+              },
+              {
+                name: "Omer Farooq",
+                role: "Team Lead",
+                img: "/omer.png",
+                desc: "Technical leadership across development, AI, and automation engagements."
+              },
+              {
+                name: "Hashim Sultan",
+                role: "Operations Head",
+                img: "/hashim.png",
+                desc: "Manages internal systems, processes, and ensures smooth day-to-day operations."
+              }
             ].map((member, i) => (
               <motion.div
                 key={member.name}
@@ -370,397 +279,183 @@ export default function Home() {
                     alt={member.name}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-500" />
                 </div>
-                <h3 className="text-xl font-heading font-bold">{member.name}</h3>
-                <p className="text-xs text-primary font-sans font-medium tracking-widest uppercase mt-1">{member.role}</p>
-                <p className="text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{member.desc}</p>
+                <h3 className="text-xl font-heading font-bold text-white">{member.name}</h3>
+                <p className="text-xs text-gray-400 font-sans font-medium tracking-widest uppercase mt-1">{member.role}</p>
+                <p className="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{member.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Results That Matter Section */}
-      <section className="py-32 relative overflow-hidden bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Process Section */}
+      <section id="process" className="py-32 relative bg-white overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-20"
+            className="text-center mb-24"
           >
-            <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ IMPACT ]</p>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight uppercase">Results That Matter</h2>
+            <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ HOW WE WORK ]</p>
+            <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight mb-6 text-black">A Clear Path from Brief to Results</h2>
+            <p className="max-w-2xl mx-auto text-[15px] font-sans font-normal leading-relaxed text-gray-500">
+              No guesswork. No scope creep. Just a repeatable process that works.
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-x-4 lg:gap-x-8 lg:px-0 md:px-12">
             {[
-              { number: "$180K+", label: "Revenue captured for clients in 90 days" },
-              { number: "10x", label: "Faster response times than human teams" },
-              { number: "87%", label: "Average lead-to-appointment conversion" },
-              { number: "24/7", label: "Uptime. No sick days. No breaks." }
-            ].map((stat, index) => (
+              { title: "Discovery", desc: "Understanding your vision and defining success metrics." },
+              { title: "Strategize", desc: "Mapping the blueprint for your custom system." },
+              { title: "Build", desc: "Engineering your solution with precision and scale." },
+              { title: "Deploy", desc: "Seamless integration and production launch." },
+              { title: "Management", desc: "Continuous optimization and proactive growth." }
+            ].map((step, i) => (
               <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
+                key={step.title}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white/[0.02] border border-white/5 rounded-2xl p-8 hover:border-primary/50 transition-all duration-300 group text-center"
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                className={`flex flex-col items-center group ${
+                  i % 2 === 0 ? "md:translate-y-8" : "md:-translate-y-8"
+                }`}
               >
-                <div className="text-4xl md:text-6xl font-heading font-bold text-white mb-4 group-hover:text-primary transition-colors duration-300">
-                  {stat.number}
-                </div>
-                <div className="text-muted-foreground font-sans font-medium text-xs uppercase tracking-wider leading-relaxed">
-                  {stat.label}
+                <div className="w-full h-[220px] xl:h-[240px] rounded-3xl p-6 lg:p-4 xl:p-8 flex flex-col items-center justify-center text-center btn-shiny-black shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-all duration-300">
+                  <div className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mb-6 text-white font-black text-xl group-hover:bg-primary/50 group-hover:border-primary transition-all">
+                    {i + 1}
+                  </div>
+                  <h3 className="text-base xl:text-lg font-heading font-black text-white mb-3 uppercase tracking-wider">{step.title}</h3>
+                  <p className="text-[10px] xl:text-[11px] text-gray-400 font-sans leading-relaxed group-hover:text-white transition-colors">
+                    {step.desc}
+                  </p>
                 </div>
               </motion.div>
             ))}
           </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-            className="mt-24 text-center border-t border-white/5 pt-12"
-          >
-            <p className="text-gray-500 font-sans font-medium text-sm tracking-widest uppercase mb-4">Built in Lahore, Pakistan</p>
-            <p className="text-primary font-sans font-medium text-xs tracking-[0.5em] font-extrabold tracking-headline-sm">SERVING CLIENTS WORLDWIDE</p>
-          </motion.div>
         </div>
       </section>
 
-      {/* Case Studies Section */}
-      <section id="case-studies" className="py-16 relative bg-black">
+
+      {/* Projects Section */}
+      <section id="projects" className="py-32 relative border-t border-black/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <p className="font-sans font-medium text-primary text-xs tracking-[0.4em] mb-4 uppercase">[ CASE STUDIES ]</p>
+            <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ OUR WORK ]</p>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight uppercase">Projects</h2>
           </motion.div>
 
-          {/* Case Study 01 - E-Commerce */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-24"
-          >
-            <div className="glass-card rounded-3xl p-8 md:p-12 border border-white/10">
-              <div className="mb-8">
-                <p className="font-sans font-medium text-gray-500 text-xs tracking-[0.3em] uppercase mb-2">E-Commerce & Retail</p>
-                <p className="font-sans font-medium text-primary text-sm tracking-wider mb-4">[ CASE STUDY 01 ]</p>
-                <h3 className="text-3xl md:text-4xl font-extrabold tracking-headline text-white mb-2">
-                  From Inbox Chaos<br />
-                  to $420K in Recovered Revenue
-                </h3>
-                <p className="text-gray-400 font-sans font-medium text-sm">Client: International Beauty Brand</p>
-              </div>
+          <Tabs defaultValue="software" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-12 bg-background/5 rounded-2xl p-1">
+              <TabsTrigger value="websites">Websites</TabsTrigger>
+              <TabsTrigger value="software">Software</TabsTrigger>
+              <TabsTrigger value="automation">Automation</TabsTrigger>
+              <TabsTrigger value="ai">AI Systems (ML)</TabsTrigger>
+            </TabsList>
 
-              <div className="grid md:grid-cols-3 gap-8 mb-8">
-                {/* The Breakdown */}
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline text-lg mb-4">The Breakdown</h4>
-                  <p className="text-gray-300 leading-relaxed text-sm">
-                    Support team drowning in 2,000+ daily messages across Instagram, WhatsApp, and web chat. Average response time: 3+ hours.
-                  </p>
-                  <p className="text-gray-300 leading-relaxed mt-4 text-sm">
-                    By the time replies went out, buyers had moved on. Cart abandonment at 71%. Support team burned out. Revenue bleeding.
-                  </p>
-                </div>
-
-                {/* What We Built */}
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Solution</h4>
-                  <p className="text-gray-300 leading-relaxed text-sm">
-                    Multi-channel AI assistant deployed across all platforms: Instant product recommendations, order tracking, and smart follow-ups.
-                  </p>
-                  <p className="text-gray-300 leading-relaxed mt-4 text-sm font-bold border-l-2 border-primary pl-4">
-                    Full integration with Shopify and Klaviyo.
-                  </p>
-                </div>
-
-                {/* The Results */}
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Impact</h4>
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Response time: 3 hrs → 8 secs</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Cart completion: +156% in 60d</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Monthly impact: $35K+ recovered</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Case Study 02 - B2B SaaS */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-24"
-          >
-            <div className="glass-card rounded-3xl p-8 md:p-12 border border-white/10">
-              <div className="mb-8">
-                <p className="font-sans font-medium text-gray-500 text-xs tracking-[0.3em] uppercase mb-2">B2B SaaS</p>
-                <p className="font-sans font-medium text-primary text-sm tracking-wider mb-4">[ CASE STUDY 02 ]</p>
-                <h3 className="text-3xl md:text-4xl font-extrabold tracking-headline text-white mb-2">
-                  3x Pipeline Growth<br />
-                  Without Hiring a Single SDR
-                </h3>
-                <p className="text-gray-400 font-sans font-medium text-sm">Client: Enterprise Workflow Platform</p>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-8 mb-8">
-                {/* The Breakdown */}
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Breakdown</h4>
-                  <p className="text-gray-300 leading-relaxed text-sm">
-                    Sales team buried in unqualified demo requests. Reps spending 60% of time on discovery calls. High-intent buyers waiting 24-48 hours.
-                  </p>
-                </div>
-
-                {/* What We Built */}
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Solution</h4>
-                  <p className="text-gray-300 leading-relaxed text-sm">
-                    AI sales system that qualifies every lead based on budget, use case, and timeline. Routes hot prospects to AEs.
-                  </p>
-                </div>
-
-                {/* The Results */}
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Impact</h4>
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Qualified demos: 3.4x increase</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Sales cycle: -38% faster close</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Revenue: $240K addl ARR Q1</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Case Study 03 - Real Estate */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-24"
-          >
-            <div className="glass-card rounded-3xl p-8 md:p-12 border border-white/10">
-              <div className="mb-8">
-                <p className="font-sans font-medium text-gray-500 text-xs tracking-[0.3em] uppercase mb-2">Real Estate</p>
-                <p className="font-sans font-medium text-primary text-sm tracking-wider mb-4">[ CASE STUDY 03 ]</p>
-                <h3 className="text-3xl md:text-4xl font-extrabold tracking-headline text-white mb-2">
-                  42 Extra Deals Closed<br />
-                  From Calls They Used to Miss
-                </h3>
-                <p className="text-gray-400 font-sans font-medium text-sm">Client: Luxury Property Agency, Dubai Marina</p>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-8 mb-8">
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Breakdown</h4>
-                  <p className="text-gray-300 leading-relaxed text-sm">
-                    International buyers calling at all hours. 40% of inquiries after 6 PM going to voicemail. Lost opportunities at $180K+ annually.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Solution</h4>
-                  <p className="text-gray-300 leading-relaxed text-sm">
-                    24/7 voice AI receptionist that answers property questions, qualifies intent, and books viewings directly into calendars.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-primary font-extrabold tracking-headline-sm text-lg mb-4">The Impact</h4>
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">After-hours bookings: 42/mo</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Deals closed: 14 extra in Q4</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-300 text-sm">Commission: $340K+ recovered</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-16 relative overflow-hidden bg-[#F9F8F3]">
-        <div className="w-full">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16 px-4"
-          >
-            <p className="font-sans font-medium text-gray-600 text-xs tracking-[0.4em] mb-4 uppercase">[ TESTIMONIALS ]</p>
-            <h2 className="text-5xl md:text-7xl font-heading font-bold tracking-tight text-black mb-2">
-              Don't take our word for it<span className="text-primary">*</span>
-            </h2>
-            <p className="font-sans font-medium text-primary text-xs tracking-[0.5em] font-extrabold tracking-headline-sm">*TAKE THEIRS.</p>
-          </motion.div>
-
-          {/* Marquee Container */}
-          <div className="relative overflow-hidden py-12">
-            <div className="flex animate-marquee gap-16 py-12">
-              {[
-                {
-                  quote: "Xenflow didn't just improve our response time—they completely eliminated the problem. We book 18 more appointments monthly.",
-                  name: "Dr. Sarah Al-Rashid",
-                  role: "FOUNDER",
-                  company: "DUBAI DENTAL WELLNESS",
-                  image: "/client1.jpeg"
-                },
-                {
-                  quote: "ROI was visible in week one. The AI handles qualification better than our junior SDRs did. Our team now only talks to buyers ready to sign.",
-                  name: "Marcus Chen",
-                  role: "VP SALES",
-                  company: "CLOUDSYNC TECHNOLOGIES",
-                  image: "/client2.jpeg"
-                },
-                {
-                  quote: "We were skeptical about AI handling customer conversations. Three months in, it's our highest-performing 'team member.'",
-                  name: "Fatima Hassan",
-                  role: "OPERATIONS DIRECTOR",
-                  company: "ELITE PROPERTY GROUP",
-                  image: "/Fatima_Hassan.jpeg"
-                },
-                {
-                  quote: "The seamless integration with our CRM was a game-changer. Every lead is tracked, tagged, and followed up automatically.",
-                  name: "James Wilson",
-                  role: "MARKETING HEAD",
-                  company: "GLOBAL RETAIL SOLUTIONS",
-                  image: "/client4.jpeg"
-                },
-                {
-                  quote: "Finally a system that actually understands context. Our lead-to-booking conversion rate has skyrocketed by 45%.",
-                  name: "Aisha Khan",
-                  role: "DIRECTOR",
-                  company: "NOVA LOGISTICS",
-                  image: "/client5.jpeg"
-                }
-              ].concat([
-                {
-                  quote: "Xenflow didn't just improve our response time—they completely eliminated the problem. We book 18 more appointments monthly.",
-                  name: "Dr. Sarah Al-Rashid",
-                  role: "FOUNDER",
-                  company: "DUBAI DENTAL WELLNESS",
-                  image: "/client1.jpeg"
-                },
-                {
-                  quote: "ROI was visible in week one. The AI handles qualification better than our junior SDRs did. Our team now only talks to buyers ready to sign.",
-                  name: "Marcus Chen",
-                  role: "VP SALES",
-                  company: "CLOUDSYNC TECHNOLOGIES",
-                  image: "/client2.jpeg"
-                },
-                {
-                  quote: "We were skeptical about AI handling customer conversations. Three months in, it's our highest-performing 'team member.'",
-                  name: "Fatima Hassan",
-                  role: "OPERATIONS DIRECTOR",
-                  company: "ELITE PROPERTY GROUP",
-                  image: "/client1.jpeg"
-                },
-                {
-                  quote: "The seamless integration with our CRM was a game-changer. Every lead is tracked, tagged, and followed up automatically.",
-                  name: "James Wilson",
-                  role: "MARKETING HEAD",
-                  company: "GLOBAL RETAIL SOLUTIONS",
-                  image: "/client4.jpeg"
-                },
-                {
-                  quote: "Finally a system that actually understands context. Our lead-to-booking conversion rate has skyrocketed by 45%.",
-                  name: "Aisha Khan",
-                  role: "DIRECTOR",
-                  company: "NOVA LOGISTICS",
-                  image: "/client5.jpeg"
-                }
-              ]).map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  className="flex-shrink-0 w-[320px]"
-                  style={{
-                    marginTop: index % 2 === 0 ? '0px' : '60px'
-                  }}
-                >
-                  <div className="group bg-black p-8 rounded-[40px] h-[380px] transition-all duration-500 hover:bg-primary/90 border border-black/5 shadow-2xl flex flex-col justify-between">
-                    <p className="font-sans text-lg text-white/90 italic leading-relaxed mb-6 group-hover:text-black transition-colors duration-500">
-                      "{testimonial.quote}"
-                    </p>
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0 border border-white/10 group-hover:border-primary/50 transition-colors">
-                        <img
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="text-white font-heading font-bold tracking-wide text-sm uppercase group-hover:text-black transition-colors duration-500">
-                          {testimonial.name}
-                        </h4>
-                        <p className="font-sans font-medium text-primary text-[9px] uppercase tracking-[0.2em] group-hover:text-black/70 transition-colors duration-500">
-                          [{testimonial.role} @ {testimonial.company}]
-                        </p>
-                      </div>
+            <TabsContent value="websites" className="mt-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[
+                  { title: "Corporate & Portfolio Websites", desc: "Sleek, high-performance web presences tailored for modern brands.", tags: ["React", "TailwindCSS"] },
+                  { title: "3D Interactive Web Experiences", desc: "Immersive browser experiences pushing the limits of web design.", tags: ["Three.js", "WebGL"] },
+                  { title: "Static Marketing Landing Pages", desc: "Lightning-fast, highly optimized pages designed specifically for conversion.", tags: ["Vite", "SEO"] },
+                  { title: "E-Commerce Storefronts", desc: "Custom shopping experiences built for speed and seamless checkout.", tags: ["Shopify", "React"] },
+                ].map(project => (
+                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
+                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {project.tags.map(tag => (
+                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
+                      ))}
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="software" className="mt-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[
+                  { title: "Content Management Tool", desc: "A custom CMS for managing digital assets, blog posts, and media — designed for non-technical teams.", tags: ["React", "Node.js"] },
+                  { title: "Real Estate Management System", desc: "End-to-end property management covering both rental and lease/sale properties. Tracks tenants, payments, property listings, and maintenance.", tags: ["React", "Node.js", "PostgreSQL"] },
+                  { title: "Pharmacy Management Tool", desc: "Inventory tracking, prescription management, supplier orders, and sales reporting for pharmacy operations.", tags: ["Dashboard", "Analytics"] },
+                ].map(project => (
+                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
+                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {project.tags.map(tag => (
+                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="automation" className="mt-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[
+                  { title: "Email Automation", desc: "Drip campaigns, follow-up sequences, and transactional email workflows using n8n and SMTP/SendGrid.", tags: ["n8n", "SMTP"] },
+                  { title: "Lead Scrapers", desc: "Automated scrapers targeting Reddit, Facebook, Instagram, LinkedIn, Twitter/X, Google Maps, and Yellow Pages.", tags: ["Python", "Playwright", "n8n"] },
+                ].map(project => (
+                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
+                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {project.tags.map(tag => (
+                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="ai" className="mt-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[
+                  { title: "Head Detection Model", desc: "Custom CNN-based computer vision model for detecting human heads in video/image feeds. Trained from scratch.", tags: ["Python", "CNN", "CV"] },
+                  { title: "Calorie Counter App", desc: "Mobile app with a custom food detection model trained using YOLOv8x. Users photograph meals for instant calorie estimates.", tags: ["YOLOv8x", "Python", "Mobile"] },
+                  { title: "Voice Calling Agent", desc: "Autonomous AI voice agent that handles inbound/outbound calls, answers questions, qualifies leads, and books appointments.", tags: ["Twilio", "Whisper", "ElevenLabs"] },
+                  { title: "AI Chatbot Agent", desc: "Context-aware conversational agent deployable across web, WhatsApp, and Telegram.", tags: ["LangChain", "OpenAI"] },
+                  { title: "Automated Chatbot Generation Tool", desc: "A fully automated system that generates, configures, and deploys custom AI chatbots for clients.", tags: ["Automation", "LLM"] },
+                ].map(project => (
+                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
+                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {project.tags.map(tag => (
+                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-32 relative">
-        <FloatingShape className="w-[400px] h-[400px] right-0 bottom-0 bg-primary/10" duration={20} />
+      <section id="contact" className="py-32 relative bg-background">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
         <div className="max-w-3xl mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="glass-card rounded-3xl p-8 md:p-12 border border-white/10"
+            className="glass-card rounded-3xl p-8 md:p-12 border border-black/10"
           >
             <div className="text-center mb-10">
               <p className="font-sans font-medium text-primary text-xs tracking-[0.4em] mb-4 uppercase">[ STRATEGY CALL ]</p>
@@ -781,7 +476,7 @@ export default function Home() {
                         <Input
                           placeholder="Your Name"
                           {...field}
-                          className="bg-white/5 border-white/10 focus:border-primary/50 min-h-[50px] text-lg"
+                          className="bg-background/5 border-black/10 focus:border-primary/50 min-h-[50px] text-lg"
                         />
                       </FormControl>
                       <FormMessage />
@@ -798,7 +493,7 @@ export default function Home() {
                         <Input
                           placeholder="Business Email"
                           {...field}
-                          className="bg-white/5 border-white/10 focus:border-primary/50 min-h-[50px] text-lg"
+                          className="bg-background/5 border-black/10 focus:border-primary/50 min-h-[50px] text-lg"
                         />
                       </FormControl>
                       <FormMessage />
@@ -816,7 +511,7 @@ export default function Home() {
                           placeholder="Phone / WhatsApp"
                           {...field}
                           value={field.value ?? ""}
-                          className="bg-white/5 border-white/10 focus:border-primary/50 min-h-[50px] text-lg"
+                          className="bg-background/5 border-black/10 focus:border-primary/50 min-h-[50px] text-lg"
                         />
                       </FormControl>
                       <FormMessage />
@@ -833,7 +528,7 @@ export default function Home() {
                         <Textarea
                           placeholder="What's your biggest lead challenge right now?"
                           {...field}
-                          className="bg-white/5 border-white/10 focus:border-primary/50 min-h-[150px] text-lg resize-none"
+                          className="bg-background/5 border-black/10 focus:border-primary/50 min-h-[150px] text-lg resize-none"
                         />
                       </FormControl>
                       <FormMessage />
@@ -844,7 +539,7 @@ export default function Home() {
                 <Button
                   type="submit"
                   disabled={createContact.isPending}
-                  className="w-full bg-primary hover:bg-primary/90 text-white h-14 text-lg font-heading font-bold tracking-wide rounded-xl neon-glow"
+                  className="w-full h-14 text-lg font-heading font-bold tracking-wide rounded-xl btn-shiny-black"
                 >
                   {createContact.isPending ? "Sending..." : "Book My Free Demo →"}
                 </Button>
@@ -855,29 +550,38 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-24 border-t border-white/10 bg-black relative overflow-hidden">
+      <footer className="pt-16 pb-8 border-t border-black/10 bg-background relative overflow-hidden">
         {/* Top Divider */}
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-primary shadow-[0_0_10px_#FF0000]" />
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-primary" />
+        
+        {/* BG Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Center CTA */}
-          <div className="text-center mb-32">
-            <h2 className="text-6xl md:text-8xl font-heading font-extrabold tracking-tighter mb-12 uppercase text-white">
-              THE FUTURE IS AUTOMATED.
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-6xl md:text-8xl font-heading font-extrabold tracking-tighter mb-12 uppercase text-black">
+              THE FUTURE IS BUILT.
             </h2>
-            <a href="#contact">
-              <Button className="bg-primary hover:bg-white text-black px-12 py-5 rounded-none font-heading font-bold text-sm tracking-widest transition-all hover:text-black hover:shadow-[0_0_30px_#FF0000] active:scale-95 uppercase">
-                START CAPTURING LEADS 24/7 →
+            <a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              <Button className="px-12 py-5 rounded-none font-heading font-bold text-sm tracking-widest uppercase btn-shiny-black">
+                START YOUR PROJECT →
               </Button>
             </a>
           </div>
 
           {/* 4-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-24 border-b border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-black/10">
             {/* Col 1 - Logo & Status */}
             <div>
-              <a href="#" className="text-2xl font-heading font-bold text-white mb-6 block">
-                XEN<span className="text-primary">FLOW</span>
+              <a href="#" className="mb-6 block">
+              <div className="relative h-[28px] md:h-[38px] w-32 md:w-44 overflow-hidden flex items-center justify-start -ml-2 md:-ml-4">
+                <img 
+                  src="/Logo.png" 
+                  alt="XENFLOW" 
+                  className="h-full w-full object-contain scale-[2.2] md:scale-[3.0]"
+                />
+              </div>
               </a>
               <div className="flex items-center space-x-2 font-sans font-medium text-[10px] tracking-widest uppercase text-gray-400">
                 <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
@@ -887,19 +591,19 @@ export default function Home() {
 
             {/* Col 2 - Quick Links */}
             <div>
-              <p className="font-sans font-medium text-gray-500 text-xs tracking-widest uppercase mb-8">[ QUICK LINKS ]</p>
+              <p className="font-sans font-medium text-black text-xs tracking-widest uppercase mb-8">[ QUICK LINKS ]</p>
               <ul className="space-y-4 font-sans font-medium text-sm uppercase tracking-wider">
-                <li><a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-primary transition-colors">Home</a></li>
-                <li><a href="#solutions" className="hover:text-primary transition-colors">Solutions</a></li>
-                <li><a href="#case-studies" className="hover:text-primary transition-colors">Case Studies</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Pricing</a></li>
-                <li><a href="#contact" className="hover:text-primary transition-colors">Book Demo</a></li>
+                <li><a href="#home" className="hover:text-primary transition-colors">Home</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">Services</a></li>
+                <li><a href="#team" className="hover:text-primary transition-colors">Our Team</a></li>
+                <li><a href="#projects" className="hover:text-primary transition-colors">Projects</a></li>
+                <li><a href="#contact" className="hover:text-primary transition-colors">Contact Us</a></li>
               </ul>
             </div>
 
             {/* Col 3 - Connect */}
             <div>
-              <p className="font-sans font-medium text-gray-500 text-xs tracking-widest uppercase mb-8">[ CONNECT ]</p>
+              <p className="font-sans font-medium text-black text-xs tracking-widest uppercase mb-8">[ CONNECT ]</p>
               <ul className="space-y-4 font-sans font-medium text-sm uppercase tracking-wider">
                 <li><a href="https://www.linkedin.com/feed/update/urn:li:activity:7427690910181675008" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a></li>
                 <li><a href="https://x.com/Xenflowtech" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">X (Twitter)</a></li>
@@ -910,10 +614,10 @@ export default function Home() {
 
             {/* Col 4 - Contact */}
             <div>
-              <p className="font-sans font-medium text-gray-500 text-xs tracking-widest uppercase mb-8">[ CONTACT ]</p>
-              <div className="font-sans font-medium text-sm text-gray-400 leading-relaxed uppercase tracking-wider space-y-4">
+              <p className="font-sans font-medium text-black text-xs tracking-widest uppercase mb-8">[ CONTACT ]</p>
+              <div className="font-sans font-medium text-sm text-black leading-relaxed uppercase tracking-wider space-y-4">
                 <p>+92 327 455 0477</p>
-                <p>hello@xenflowtech@gmail.com</p>
+                <p>support@xenflow.agency</p>
                 <p>
                   Remote-First Company<br />
                   Based in Lahore, Pakistan
@@ -923,13 +627,13 @@ export default function Home() {
           </div>
 
           {/* Legal Bar */}
-          <div className="pt-12 flex items-center justify-between">
-            <p className="text-[10px] font-sans font-medium text-gray-600 uppercase tracking-widest">
+          <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <p className="text-[10px] font-sans font-medium text-gray-600 uppercase tracking-widest text-center md:text-left">
               © 2026 XENFLOW AI. ALL RIGHTS RESERVED.
             </p>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-primary hover:text-white transition-colors"
+              className="text-primary hover:text-foreground transition-colors"
             >
               <span className="text-xl font-bold font-sans font-medium uppercase tracking-widest">↑</span>
             </button>

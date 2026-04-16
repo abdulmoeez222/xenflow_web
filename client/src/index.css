@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth !important;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 @tailwind base;
@@ -5,35 +9,38 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 3%;
-  /* #080808 */
-  --foreground: 0 0% 98%;
+  --background: 0 0% 97%;
+  /* #F7F7F7 */
+  --foreground: 217 10% 25%;
+  /* #393E46 */
 
-  --card: 0 0% 5%;
-  --card-foreground: 0 0% 98%;
+  --card: 0 0% 100%;
+  --card-foreground: 217 10% 25%;
 
-  --popover: 0 0% 5%;
-  --popover-foreground: 0 0% 98%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 217 10% 25%;
 
-  --primary: 0 100% 50%;
-  /* #FF0000 Neon Red */
-  --primary-foreground: 0 0% 100%;
+  --primary: 217 10% 25%;
+  /* #393E46 */
+  --primary-foreground: 0 0% 97%;
 
-  --secondary: 0 0% 12%;
-  --secondary-foreground: 0 0% 98%;
+  --secondary: 0 0% 93%;
+  /* #EEEEEE */
+  --secondary-foreground: 217 10% 25%;
 
-  --muted: 0 0% 12%;
-  --muted-foreground: 0 0% 60%;
+  --muted: 0 0% 93%;
+  --muted-foreground: 223 14% 62%;
+  /* #929AAB */
 
-  --accent: 0 100% 50%;
-  --accent-foreground: 0 0% 100%;
+  --accent: 0 0% 93%;
+  --accent-foreground: 217 10% 25%;
 
-  --destructive: 0 62% 30%;
+  --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 0 0% 15%;
-  --input: 0 0% 15%;
-  --ring: 0 100% 50%;
+  --border: 0 0% 93%;
+  --input: 0 0% 93%;
+  --ring: 223 14% 62%;
 
   --radius: 0.5rem;
 
@@ -56,13 +63,13 @@
   h5,
   h6 {
     font-family: var(--font-heading);
-    @apply font-bold tracking-tight;
+    @apply font-black tracking-tight;
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-neutral-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground;
   }
 
   .text-gradient-primary {
@@ -70,7 +77,7 @@
   }
 
   .glass-card {
-    @apply bg-black/40 backdrop-blur-md border border-white/10 shadow-xl;
+    @apply bg-white/60 backdrop-blur-xl border border-black/5 shadow-xl;
   }
 
   .neon-glow {
@@ -80,6 +87,19 @@
   .neon-border {
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.3), inset 0 0 10px rgba(255, 0, 0, 0.1);
   }
+
+  .btn-shiny-black {
+    background: linear-gradient(180deg, #3a3a3a 0%, #0a0a0a 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid #555555 !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.2s ease-in-out !important;
+  }
+  .btn-shiny-black:hover {
+    background: linear-gradient(180deg, #4a4a4a 0%, #1a1a1a 100%) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 6px 20px rgba(0, 0, 0, 0.6) !important;
+    transform: translateY(-1px) !important;
+  }
 }
 
 /* Custom scrollbar for that cyber feel */
@@ -88,11 +108,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #f7f7f7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #929aab;
   border-radius: 4px;
 }
 

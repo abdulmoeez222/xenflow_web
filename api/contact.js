@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { getSheetsClient, SPREADSHEET_ID, SHEET_NAME } from "./lib/sheets.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -10,36 +10,28 @@ export default async function handler(req, res) {
       ? JSON.parse(req.body || "{}")
       : req.body || {};
 
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+    const { name, email, phone, message } = body;
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error("Missing Supabase env variables");
-      return res.status(500).json({ error: "Server configuration error" });
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: "Name, email, and message are required." });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const sheets = getSheetsClient();
+    const timestamp = new Date().toISOString();
 
-    const { error } = await supabase.from("contacts").insert([
-      {
-        name: body.name,
-        email: body.email,
-        company: body.company || null,
-        message: body.message,
-        phone: body.phone || null,
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_NAME}!A:E`,
+      valueInputOption: "RAW",
+      requestBody: {
+        values: [[timestamp, name, email, phone || "", message]],
       },
-    ]);
-
-    if (error) {
-      console.error("Supabase insert error:", error);
-      return res.status(500).json({ error: "Database error" });
-    }
+    });
 
     return res.status(200).json({
       success: true,
       message: "Thank you! We will get back to you soon.",
     });
-
   } catch (error) {
     console.error("Contact API error:", error);
     return res.status(500).json({ error: "Internal server error" });
