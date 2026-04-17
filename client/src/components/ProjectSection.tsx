@@ -7,6 +7,7 @@ interface Project {
   title: string;
   description: string;
   image?: string;
+  fullImage?: boolean;
 }
 
 interface Category {
@@ -31,7 +32,8 @@ const projectData: Category[] = [
         id: 2,
         title: "Cloud Pharmacy Management",
         description: "A secure, cloud-based platform featuring role-based access control and advanced inventory management. Streamlines pharmaceutical operations with a dynamic dashboard that monitors stock levels, tracks payments, and manages online order collections with real-time notifications.",
-        image: "https://images.unsplash.com/photo-1587854685352-25d82032960f?q=80&w=2070&auto=format&fit=crop"
+        image: "/CloudPharmacyManagement.png",
+        fullImage: true
       },
       {
         id: 3,
@@ -61,7 +63,8 @@ const projectData: Category[] = [
         id: 2,
         title: "Instant Chatbot Generator",
         description: "An automated system that builds a custom AI chatbot in seconds. Simply provide a website URL; the tool scrapes all relevant data and generates a fully-trained, context-aware chatbot ready for deployment.",
-        image: "https://images.unsplash.com/photo-1531746790731-6c087fecd05a?q=80&w=2006&auto=format&fit=crop"
+        image: "/ChatbotGenerationTool.png",
+        fullImage: true
       },
       {
         id: 3,
@@ -182,14 +185,14 @@ export function ProjectSection() {
                     {/* Image Column */}
                     {project.image && (
                       <div className="flex-[1.2] w-full">
-                        <div className="relative aspect-video rounded-3xl overflow-hidden glass-card p-4 lg:p-12 bg-white/5">
+                        <div className={`relative aspect-video rounded-3xl overflow-hidden glass-card ${project.fullImage ? 'p-0' : 'p-4 lg:p-12'} bg-white/5`}>
                           <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                           <img 
                             src={project.image} 
                             alt={project.title}
                             loading="lazy"
                             decoding="async"
-                            className="w-full h-full object-contain transition-all duration-700 hover:scale-105 drop-shadow-2xl"
+                            className={`w-full h-full ${project.fullImage ? 'object-cover' : 'object-contain'} transition-all duration-700 hover:scale-105 drop-shadow-2xl`}
                           />
                         </div>
                       </div>
