@@ -54,6 +54,9 @@ html {
     @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground;
     font-family: var(--font-sans);
     font-weight: 400;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1,
@@ -69,15 +72,17 @@ html {
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-black via-black/90 to-black/80;
   }
 
   .text-gradient-primary {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-red-500 to-orange-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-black via-gray-900 to-gray-800;
   }
 
   .glass-card {
     @apply bg-white/60 backdrop-blur-xl border border-black/5 shadow-xl;
+    transform: translateZ(0);
+    will-change: transform, backdrop-filter;
   }
 
   .neon-glow {

@@ -58,7 +58,7 @@ export function FloatingChatbot() {
                 {/* Chat Toggle Button */}
                 <motion.button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="w-16 h-16 rounded-full bg-primary hover:bg-red-600 shadow-2xl flex items-center justify-center transition-colors relative overflow-hidden"
+                    className="w-16 h-16 rounded-full bg-black hover:bg-black/90 shadow-2xl flex items-center justify-center transition-colors relative overflow-hidden"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     animate={{
@@ -115,7 +115,7 @@ export function FloatingChatbot() {
                         className="fixed right-3 sm:right-6 top-[7rem] bottom-20 w-[calc(100vw-1.5rem)] max-w-[380px] min-h-[280px] max-h-[calc(100vh-7rem-5rem)] bg-black border border-white/20 rounded-2xl shadow-2xl z-40 flex flex-col overflow-hidden"
                     >
                         {/* Header - compact */}
-                        <div className="flex-shrink-0 bg-gradient-to-r from-primary to-red-600 px-3 py-2.5 sm:p-4 flex items-center gap-2 sm:gap-3">
+                        <div className="flex-shrink-0 bg-gradient-to-r from-black to-black/80 px-3 py-2.5 sm:p-4 flex items-center gap-2 sm:gap-3">
                             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
                                 <img
                                     src="/chatbot-icon.png"
@@ -177,7 +177,7 @@ export function FloatingChatbot() {
                                 />
                                 <button
                                     onClick={handleSend}
-                                    className="bg-primary hover:bg-red-600 rounded-xl px-4 py-3 transition-colors"
+                                    className="bg-black hover:bg-black/90 rounded-xl px-4 py-3 transition-colors"
                                 >
                                     <Send className="w-5 h-5 text-white" />
                                 </button>

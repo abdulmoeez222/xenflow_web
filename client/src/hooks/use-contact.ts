@@ -32,8 +32,8 @@ export function useCreateContact() {
     },
     onSuccess: () => {
       toast({
-        title: "Message sent",
-        description: "We've received your inquiry and will get back to you shortly.",
+        title: "Success!",
+        description: "Form filled successfully. We will get back to you shortly.",
         variant: "default",
       });
     },

@@ -5,6 +5,8 @@ import { useCreateContact } from "@/hooks/use-contact";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ProjectSection } from "@/components/ProjectSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +15,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Code2, Globe, Zap, Puzzle, Megaphone, Brain } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRef } from "react";
-import { FloatingChatbot } from "@/components/FloatingChatbot";
 
 export default function Home() {
   const scrollRef = useRef(null);
@@ -78,17 +79,21 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white overflow-x-hidden">
       <Navbar />
-      <FloatingChatbot />
 
       {/* Hero Section - compact spacing so CTAs stay fully visible on all viewports */}
       <section id="home" ref={scrollRef} className="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden pt-32 sm:pt-40 md:pt-48 pb-16 sm:pb-20 md:pb-24">
-        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-black/10 blur-[100px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-black/10 blur-[100px] rounded-full pointer-events-none" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+        {/* Dynamic Shapes */}
+        <FloatingShape className="w-64 h-64 top-[10%] left-[5%] bg-primary/20" delay={0} duration={25} />
+        <FloatingShape className="w-96 h-96 bottom-[20%] right-[10%] bg-primary/10" delay={2} duration={30} />
+        <FloatingShape className="w-48 h-48 top-[40%] right-[25%] bg-black/5" delay={5} duration={20} />
+
+        <div className="absolute top-[-30%] left-[-15%] w-[600px] h-[600px] bg-black/[0.3] blur-[140px] rounded-full pointer-events-none will-change-[filter]" />
+        <div className="absolute bottom-[-30%] right-[-15%] w-[600px] h-[600px] bg-black/[0.3] blur-[140px] rounded-full pointer-events-none will-change-[filter]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
         <motion.div
           style={{ y: heroY, opacity }}
-          className="relative z-10 max-w-5xl mx-auto text-center"
+          className="relative z-10 max-w-5xl mx-auto text-center will-change-transform"
         >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -144,7 +149,7 @@ export default function Home() {
 
       {/* Services Section */}
       <section id="services" className="py-32 relative bg-background">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -183,9 +188,11 @@ export default function Home() {
               <img
                 src="/moiz.png"
                 alt="Abdul Moeez - Founder"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-40" />
               <div className="absolute bottom-8 left-8">
                 <p className="font-sans font-medium text-primary text-sm mb-2 tracking-widest uppercase">[ FOUNDER ]</p>
                 <h3 className="text-3xl font-extrabold tracking-headline">Abdul Moeez</h3>
@@ -277,9 +284,11 @@ export default function Home() {
                   <img
                     src={member.img}
                     alt={member.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
                 </div>
                 <h3 className="text-xl font-heading font-bold text-white">{member.name}</h3>
                 <p className="text-xs text-gray-400 font-sans font-medium tracking-widest uppercase mt-1">{member.role}</p>
@@ -292,7 +301,6 @@ export default function Home() {
 
       {/* Process Section */}
       <section id="process" className="py-32 relative bg-white overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -341,114 +349,11 @@ export default function Home() {
       </section>
 
 
-      {/* Projects Section */}
-      <section id="projects" className="py-32 relative border-t border-black/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ OUR WORK ]</p>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight uppercase">Projects</h2>
-          </motion.div>
-
-          <Tabs defaultValue="software" className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-12 bg-background/5 rounded-2xl p-1">
-              <TabsTrigger value="websites">Websites</TabsTrigger>
-              <TabsTrigger value="software">Software</TabsTrigger>
-              <TabsTrigger value="automation">Automation</TabsTrigger>
-              <TabsTrigger value="ai">AI Systems (ML)</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="websites" className="mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {[
-                  { title: "Corporate & Portfolio Websites", desc: "Sleek, high-performance web presences tailored for modern brands.", tags: ["React", "TailwindCSS"] },
-                  { title: "3D Interactive Web Experiences", desc: "Immersive browser experiences pushing the limits of web design.", tags: ["Three.js", "WebGL"] },
-                  { title: "Static Marketing Landing Pages", desc: "Lightning-fast, highly optimized pages designed specifically for conversion.", tags: ["Vite", "SEO"] },
-                  { title: "E-Commerce Storefronts", desc: "Custom shopping experiences built for speed and seamless checkout.", tags: ["Shopify", "React"] },
-                ].map(project => (
-                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
-                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="software" className="mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {[
-                  { title: "Content Management Tool", desc: "A custom CMS for managing digital assets, blog posts, and media — designed for non-technical teams.", tags: ["React", "Node.js"] },
-                  { title: "Real Estate Management System", desc: "End-to-end property management covering both rental and lease/sale properties. Tracks tenants, payments, property listings, and maintenance.", tags: ["React", "Node.js", "PostgreSQL"] },
-                  { title: "Pharmacy Management Tool", desc: "Inventory tracking, prescription management, supplier orders, and sales reporting for pharmacy operations.", tags: ["Dashboard", "Analytics"] },
-                ].map(project => (
-                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
-                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="automation" className="mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {[
-                  { title: "Email Automation", desc: "Drip campaigns, follow-up sequences, and transactional email workflows using n8n and SMTP/SendGrid.", tags: ["n8n", "SMTP"] },
-                  { title: "Lead Scrapers", desc: "Automated scrapers targeting Reddit, Facebook, Instagram, LinkedIn, Twitter/X, Google Maps, and Yellow Pages.", tags: ["Python", "Playwright", "n8n"] },
-                ].map(project => (
-                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
-                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="ai" className="mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {[
-                  { title: "Head Detection Model", desc: "Custom CNN-based computer vision model for detecting human heads in video/image feeds. Trained from scratch.", tags: ["Python", "CNN", "CV"] },
-                  { title: "Calorie Counter App", desc: "Mobile app with a custom food detection model trained using YOLOv8x. Users photograph meals for instant calorie estimates.", tags: ["YOLOv8x", "Python", "Mobile"] },
-                  { title: "Voice Calling Agent", desc: "Autonomous AI voice agent that handles inbound/outbound calls, answers questions, qualifies leads, and books appointments.", tags: ["Twilio", "Whisper", "ElevenLabs"] },
-                  { title: "AI Chatbot Agent", desc: "Context-aware conversational agent deployable across web, WhatsApp, and Telegram.", tags: ["LangChain", "OpenAI"] },
-                  { title: "Automated Chatbot Generation Tool", desc: "A fully automated system that generates, configures, and deploys custom AI chatbots for clients.", tags: ["Automation", "LLM"] },
-                ].map(project => (
-                  <div key={project.title} className="glass-card rounded-2xl p-6 border border-black/5 hover:border-primary/40 transition-all duration-300">
-                    <h3 className="text-lg font-heading font-bold mb-2">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] px-2 py-1 rounded-full border border-primary/30 text-primary uppercase tracking-widest">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
+      <ProjectSection />
+      <TestimonialsSection />
 
       <section id="contact" className="py-32 relative bg-background">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
         <div className="max-w-3xl mx-auto px-4 relative z-10">
           <motion.div
@@ -550,12 +455,12 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="pt-16 pb-8 border-t border-black/10 bg-background relative overflow-hidden">
+      <footer className="pt-32 pb-16 border-t border-black/10 bg-secondary/30 relative overflow-hidden">
         {/* Top Divider */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-primary" />
         
         {/* BG Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Center CTA */}
@@ -575,18 +480,14 @@ export default function Home() {
             {/* Col 1 - Logo & Status */}
             <div>
               <a href="#" className="mb-6 block">
-              <div className="relative h-[28px] md:h-[38px] w-32 md:w-44 overflow-hidden flex items-center justify-start -ml-2 md:-ml-4">
+              <div className="relative h-[38px] md:h-[48px] w-40 md:w-56 overflow-hidden flex items-center justify-start -ml-2 md:-ml-4">
                 <img 
                   src="/Logo.png" 
                   alt="XENFLOW" 
-                  className="h-full w-full object-contain scale-[2.2] md:scale-[3.0]"
+                  className="h-full w-full object-contain scale-[2.7] md:scale-[3.3]"
                 />
               </div>
               </a>
-              <div className="flex items-center space-x-2 font-sans font-medium text-[10px] tracking-widest uppercase text-gray-400">
-                <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-                <span>SYSTEMS: OPERATIONAL</span>
-              </div>
             </div>
 
             {/* Col 2 - Quick Links */}

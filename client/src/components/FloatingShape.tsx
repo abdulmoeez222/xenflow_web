@@ -20,9 +20,9 @@ export function FloatingShape({ className, delay = 0, duration = 20 }: FloatingS
         ease: "easeInOut",
         delay: delay,
       }}
-      className={`absolute pointer-events-none opacity-30 mix-blend-screen blur-3xl ${className}`}
+      className={`absolute pointer-events-none opacity-15 mix-blend-multiply blur-3xl ${className}`}
     >
-      <div className="w-full h-full bg-gradient-to-br from-primary to-purple-600 rounded-full" />
+      <div className="w-full h-full bg-gradient-to-br from-black to-black/40 rounded-full" />
     </motion.div>
   );
 }

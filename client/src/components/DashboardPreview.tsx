@@ -10,7 +10,7 @@ export function DashboardPreview() {
     ];
 
     return (
-        <div className="w-full bg-black/60 rounded-3xl border border-white/10 p-6 font-sans overflow-hidden shadow-2xl backdrop-blur-xl">
+        <div className="w-full bg-black/60 rounded-3xl border border-white/10 p-6 font-sans overflow-hidden shadow-2xl backdrop-blur-xl transform-gpu will-change-[transform,filter]">
             {/* Header */}
             <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
                 <div className="flex items-center gap-3">
@@ -46,7 +46,7 @@ export function DashboardPreview() {
                                 initial={{ width: 0 }}
                                 animate={{ width: `${stat.progress}%` }}
                                 transition={{ duration: 1, delay: 0.5 + i * 0.1 }}
-                                className={`h-full bg-gradient-to-r from-primary to-primary/50`}
+                                className={`h-full bg-gradient-to-r from-black to-gray-800`}
                             />
                         </div>
                     </motion.div>

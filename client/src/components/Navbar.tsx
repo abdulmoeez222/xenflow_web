@@ -19,8 +19,8 @@ export function Navbar() {
     <header className="fixed top-2 left-0 right-0 z-50 px-6">
       <nav className="max-w-6xl mx-auto flex items-center justify-between pl-1 md:pl-2 pr-4 md:pr-8 py-1.5 glass-card rounded-full border border-black/5 shadow-2xl relative overflow-hidden">
         {/* End Gradients - Shrunk left to prevent masking logo */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/5 to-transparent pointer-events-none z-0" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black/10 to-transparent pointer-events-none z-0" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/10 to-transparent pointer-events-none z-0" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black/20 to-transparent pointer-events-none z-0" />
         {/* Left: Logo */}
         <div
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -30,7 +30,7 @@ export function Navbar() {
             <img 
               src="/Logo.png" 
               alt="XENFLOW" 
-              className="h-full w-full object-contain scale-[2.2] md:scale-[2.8] transform translate-x-0 md:translate-x-0 transition-transform duration-300 hover:scale-[3.0] relative z-10"
+              className="h-full w-full object-contain scale-[2.2] md:scale-[2.8] transform-gpu translate-x-0 md:translate-x-0 transition-transform duration-300 hover:scale-[3.0] relative z-10 will-change-transform"
             />
           </div>
         </div>

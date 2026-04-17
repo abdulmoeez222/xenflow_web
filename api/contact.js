@@ -1,4 +1,4 @@
-import { getSheetsClient, SPREADSHEET_ID, SHEET_NAME } from "./lib/sheets.js";
+import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -16,24 +16,39 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Name, email, and message are required." });
     }
 
-    const sheets = getSheetsClient();
-    const timestamp = new Date().toISOString();
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A:E`,
-      valueInputOption: "RAW",
-      requestBody: {
-        values: [[timestamp, name, email, phone || "", message]],
+    // Configure nodemailer with Gmail (using same sender/receiver as per request)
+    // NOTE: This requires EMAIL_USER and EMAIL_PASS (App Password) environment variables
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER || "aiwithmoiz@gmail.com",
+        pass: process.env.EMAIL_PASS, // User must set this in their environment
       },
     });
 
+    const mailOptions = {
+      from: process.env.EMAIL_USER || "aiwithmoiz@gmail.com",
+      to: "aiwithmoiz@gmail.com",
+      subject: `New Xenflow Contact: ${name}`,
+      text: `
+        Name: ${name}
+        Email: ${email}
+        Phone: ${phone || "N/A"}
+        
+        Message:
+        ${message}
+      `,
+      replyTo: email,
+    };
+
+    await transporter.sendMail(mailOptions);
+
     return res.status(200).json({
       success: true,
-      message: "Thank you! We will get back to you soon.",
+      message: "Thank you! I have received your message and will get back to you soon.",
     });
   } catch (error) {
     console.error("Contact API error:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
-}
+}
