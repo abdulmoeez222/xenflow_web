@@ -99,27 +99,6 @@ const projectData: Category[] = [
     ]
   },
 
-  {
-    id: "ml",
-    name: "ML/DL",
-    projects: [
-      {
-        id: 1,
-        title: "Head Detection Model",
-        description: "A custom CNN-based computer vision system high-accuracy head detection. Features real-time spatial analysis and person counting directly from image or video streams. [ METRICS: 98.4% mAP @ 0.5 IoU | 0.82 F1-Score | Processing Latency: 12ms ]",
-      },
-      {
-        id: 2,
-        title: "BERT Speech Classification",
-        description: "Advanced NLP model utilizing pre-trained BERT architecture to analyze social sentiment and intent. Precision-tuned to identify and categorize content into Hate Speech, Normal, or Vulgar categories with high linguistic sensitivity.",
-      },
-      {
-        id: 3,
-        title: "Calorie Counter (YOLO)",
-        description: "Real-time nutritional analysis tool using the YOLO (You Only Look Once) architecture. Instantly detects various food items from image inputs and calculates total calorie count and nutritional breakdown.",
-      }
-    ]
-  }
 ];
 
 export function ProjectSection() {
