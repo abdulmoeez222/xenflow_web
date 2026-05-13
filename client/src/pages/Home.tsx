@@ -64,11 +64,7 @@ export default function Home() {
       description: "No template fits your problem? We build from scratch. Bespoke tools, integrations, and systems precisely engineered around your unique requirements.",
       icon: Puzzle,
     },
-    {
-      title: "Marketing",
-      description: "Full-spectrum digital marketing: paid ads (Meta, Google), technical SEO, and next-gen GEO (Generative Engine Optimization) to rank in AI search results.",
-      icon: Megaphone,
-    },
+
     {
       title: "AI Systems",
       description: "Production-grade ML models, voice calling agents, autonomous AI chatbots, and fully automated chatbot generation tools — built and deployed end to end.",
@@ -102,7 +98,7 @@ export default function Home() {
             className="mb-3 sm:mb-5 md:mb-6 inline-block"
           >
             <span className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs sm:text-sm font-sans font-medium tracking-widest uppercase">
-              Custom Tailored Solutions
+              AI-Native Software Company
             </span>
           </motion.div>
 
@@ -110,12 +106,11 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-[32px] md:text-[48px] font-heading font-bold leading-[1.1] text-[#111827] mb-4 sm:mb-6 md:mb-8 uppercase flex flex-col items-center justify-center text-center"
+            className="text-[40px] md:text-[72px] font-heading font-black leading-[1.0] text-[#111827] mb-6 sm:mb-8 md:mb-10 uppercase flex flex-col items-center justify-center text-center tracking-tighter"
           >
-            <span>SYSTEMS THAT</span>
-            <span className="text-[#111827]">
-              SAVE TIME & MONEY
-            </span>
+            <span>Software</span>
+            <span className="text-primary">That Thinks.</span>
+            <span className="text-black/40">Not Just Runs.</span>
           </motion.h1>
 
           <motion.p
@@ -124,7 +119,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="max-w-3xl mx-auto text-[15px] font-sans font-normal leading-[25.5px] text-[#4B5563] mb-6 sm:mb-8 md:mb-10 text-center"
           >
-            Whether you need a full digital marketing strategy to increase sales, or robust POS systems paired with seamless workflow automations. We build custom solutions tailored to your exact needs to streamline processes, save you time, and put your growth on autopilot.
+            We build mobile apps, web platforms, POS systems, ERP, CRM, and management software with AI embedded by default. Not bolted on. Not optional. Native.
           </motion.p>
 
           <motion.div
@@ -194,8 +189,8 @@ export default function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-40" />
               <div className="absolute bottom-8 left-8">
-                <p className="font-sans font-medium text-primary text-sm mb-2 tracking-widest uppercase">[ FOUNDER ]</p>
-                <h3 className="text-3xl font-extrabold tracking-headline">Abdul Moeez</h3>
+                <p className="font-sans font-medium text-white text-sm mb-2 tracking-widest uppercase">[ FOUNDER ]</p>
+                <h3 className="text-3xl font-extrabold tracking-headline text-white">Abdul Moeez</h3>
               </div>
             </motion.div>
 
@@ -211,16 +206,16 @@ export default function Home() {
               </h2>
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
                 <p className="font-bold italic text-black">
-                  "We believe that true growth shouldn't be bottlenecked by outdated systems or disjointed marketing."
+                  "We believe that true growth shouldn't be bottlenecked by outdated systems or inefficient processes."
                 </p>
                 <p>
-                  Working with businesses globally, the pattern is obvious: companies struggle when they lack cohesive ecosystems. Without a unified digital presence, targeted marketing, and smooth internal processes, they bleed time and money.
+                  Working with businesses globally, the pattern is obvious: companies struggle when they lack cohesive ecosystems. Without a unified digital presence and smooth internal processes, they bleed time and money.
                 </p>
                 <p>
-                  Xenflow was built to solve this. We engineer custom solutions tailored exactly to your needs. If you lack a website and need a full-scale marketing strategy to guarantee sales, we deliver the complete solution.
+                  Xenflow was built to solve this. We engineer custom solutions tailored exactly to your needs. If you lack a professional digital footprint and need high-performance systems to guarantee growth, we deliver the complete solution.
                 </p>
                 <p>
-                  Beyond marketing, we implement robust POS systems and integrate them with seamless workflow automations to streamline your operations. We put your business on autopilot so you can focus on scaling.
+                  We implement robust POS systems and integrate them with seamless workflow automations to streamline your operations. We put your business on autopilot so you can focus on scaling.
                 </p>
               </div>
               <div className="mt-10 flex items-center space-x-6">
@@ -480,11 +475,11 @@ export default function Home() {
             {/* Col 1 - Logo & Status */}
             <div>
               <a href="#" className="mb-6 block">
-              <div className="relative h-[38px] md:h-[48px] w-40 md:w-56 overflow-hidden flex items-center justify-start -ml-2 md:-ml-4">
+              <div className="relative h-[38px] md:h-[48px] w-48 md:w-64 overflow-hidden flex items-center justify-start -ml-4 md:-ml-8">
                 <img 
                   src="/Logo.png" 
                   alt="XENFLOW" 
-                  className="h-full w-full object-contain scale-[2.7] md:scale-[3.3]"
+                  className="h-full w-full object-contain scale-[2.2] md:scale-[2.8]"
                 />
               </div>
               </a>

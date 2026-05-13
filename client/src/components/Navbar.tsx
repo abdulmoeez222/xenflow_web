@@ -47,7 +47,7 @@ export function Navbar() {
                   document.querySelector(link.href)?.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="text-xs font-medium text-muted-foreground hover:text-primary transition-all duration-200 uppercase tracking-widest"
+              className="text-xs font-bold text-black hover:text-primary transition-all duration-200 uppercase tracking-widest"
             >
               {link.name}
             </a>
@@ -97,7 +97,7 @@ export function Navbar() {
                   document.querySelector(link.href)?.scrollIntoView({ behavior: "smooth" });
                 }
               }}
-              className="block text-sm font-medium text-muted-foreground hover:text-primary transition-colors uppercase tracking-widest"
+              className="block text-sm font-bold text-black hover:text-primary transition-colors uppercase tracking-widest"
             >
               {link.name}
             </a>

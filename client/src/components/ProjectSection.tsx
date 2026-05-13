@@ -39,12 +39,7 @@ const projectData: Category[] = [
         description: "A high-conversion professional boutique website designed for social media agencies. Built with a focus on portfolio showcasing and client acquisition, providing a modern, sleek digital front for creative excellence.",
         image: "/wesbite.png"
       },
-      {
-        id: 4,
-        title: "3D Immersive Experience",
-        description: "A next-generation 3D interactive website pushing the boundaries of web design. Utilizes advanced WebGL and Three.js technologies to create an immersive, responsive environment that wows visitors at first glance.",
-        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop"
-      }
+
     ]
   },
   {
@@ -77,23 +72,7 @@ const projectData: Category[] = [
       }
     ]
   },
-  {
-    id: "marketing",
-    name: "MARKETING",
-    projects: [
-       {
-        id: 1,
-        title: "FB & Reddit Lead Intel",
-        description: "A high-speed scraping engine that monitors Facebook groups and Subreddits in real-time. The system automatically scores content based on intent and instantly notifies you when a 'Warm' or 'Hot' lead appears, ensuring you never miss a conversion opportunity.",
-        image: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?q=80&w=2070&auto=format&fit=crop"
-      }
-    ],
-    listItems: [
-        "Meta Ads Management",
-        "Google Ads (PPC) Strategy",
-        "SEO & GEO Optimization"
-    ]
-  },
+
   {
     id: "ml",
     name: "ML/DL",
@@ -189,7 +168,7 @@ export function ProjectSection() {
                             alt={project.title}
                             loading="lazy"
                             decoding="async"
-                            className="w-full h-full object-contain transition-all duration-700 hover:scale-105 drop-shadow-2xl"
+                            className="w-full h-full object-contain transition-all duration-700 drop-shadow-2xl"
                           />
                         </div>
                       </div>
@@ -197,20 +176,7 @@ export function ProjectSection() {
                   </div>
                 ))}
 
-                {/* List Items for Marketing */}
-                {currentCategory?.listItems && (
-                  <div className="mt-16 pt-16 border-t border-black/5">
-                    <h4 className="text-xl font-heading font-black tracking-tight uppercase mb-8 text-black opacity-50 text-center">Additional Services</h4>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      {currentCategory.listItems.map((item, i) => (
-                        <div key={i} className="flex items-center gap-4 p-8 glass-card border border-black/5 rounded-2xl hover:border-black/20 transition-all">
-                          <div className="w-2 h-2 rounded-full bg-primary" />
-                          <span className="font-sans font-bold text-lg tracking-wide text-black">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+
               </div>
             </motion.div>
           </AnimatePresence>

@@ -7,12 +7,7 @@ const testimonials = [
     content: "Xenflow gave us structure, speed, and systems. We stopped firefighting and started scaling our dental network.",
     avatar: "SK"
   },
-  {
-    name: "Ali Raza",
-    role: "Director, Prime Financial",
-    content: "Their lead intel engine connects our marketing and operations in one pipeline. Results became predictable and volume tripled.",
-    avatar: "AR"
-  },
+
   {
     name: "Meera Nair",
     role: "COO, SaaSGrid",
@@ -31,24 +26,14 @@ const testimonials = [
     content: "The AI voice agent they deployed handles our initial consultations perfectly. It sounds incredibly human and never misses a lead.",
     avatar: "LB"
   },
-  {
-    name: "James Wilson",
-    role: "Product Lead, Innovate3D",
-    content: "The 3D immersive experience Xenflow built for our launch was breathtaking. It completely redefined our digital brand presence.",
-    avatar: "JW"
-  },
+
   {
     name: "Sofia Chen",
     role: "Founder, RentEase",
     content: "Our Rental Management System is now a complete ecosystem. Automated lease assignations and payments have saved us countless hours.",
     avatar: "SC"
   },
-  {
-    name: "Marcus Thorne",
-    role: "Marketing Director, Visionary AI",
-    content: "Their GEO (Generative Engine Optimization) strategy put us at the top of AI search results. A total game-changer for our organic traffic.",
-    avatar: "MT"
-  },
+
   {
     name: "Elena Rodriguez",
     role: "Operations, BioTech Solutions",
@@ -102,7 +87,7 @@ export function TestimonialsSection() {
               x: {
                 repeat: Infinity,
                 repeatType: "loop",
-                duration: 40,
+                duration: 20,
                 ease: "linear",
               },
             }}
