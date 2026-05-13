@@ -7,6 +7,10 @@ interface Project {
   title: string;
   description: string;
   image?: string;
+  fullImage?: boolean;
+  imageFit?: "cover" | "contain" | "fill";
+  imageScale?: string;
+  imageHoverScale?: string;
 }
 
 interface Category {
@@ -25,21 +29,40 @@ const projectData: Category[] = [
         id: 1,
         title: "Rental Management System",
         description: "A comprehensive property ecosystem that handles units, tenants, and automated lease assignations. Features a robust payment engine with automated notifications for upcoming and overdue payments. The clean administrative dashboard provides real-time visibility into expenses, collection metrics, and occupancy status of buildings and units.",
-        image: "/rentalmanagement.png"
+        image: "/rentalmanagement.png",
+        fullImage: true,
+        imageFit: "fill",
+        imageScale: "scale-x-[1.30] scale-y-[1.10]",
+        imageHoverScale: "hover:scale-x-[1.35] hover:scale-y-[1.15]"
       },
       {
         id: 2,
         title: "Cloud Pharmacy Management",
         description: "A secure, cloud-based platform featuring role-based access control and advanced inventory management. Streamlines pharmaceutical operations with a dynamic dashboard that monitors stock levels, tracks payments, and manages online order collections with real-time notifications.",
-        image: "https://images.unsplash.com/photo-1587854685352-25d82032960f?q=80&w=2070&auto=format&fit=crop"
+        image: "/CloudPharmacyManagement.png",
+        fullImage: true,
+        imageFit: "fill",
+        imageScale: "scale-y-[1.20] scale-x-[1.80]",
+        imageHoverScale: "hover:scale-y-[1.25] hover:scale-x-[1.85]"
       },
       {
         id: 3,
         title: "Social Media Agency Website",
         description: "A high-conversion professional boutique website designed for social media agencies. Built with a focus on portfolio showcasing and client acquisition, providing a modern, sleek digital front for creative excellence.",
-        image: "/wesbite.png"
+        image: "/wesbite.png",
+        fullImage: true,
+        imageFit: "fill"
       },
-
+      {
+        id: 4,
+        title: "3D Immersive Experience",
+        description: "A next-generation 3D interactive website pushing the boundaries of web design. Utilizes advanced WebGL and Three.js technologies to create an immersive, responsive environment that wows visitors at first glance.",
+        image: "/3D_Immersive Experience.png",
+        fullImage: true,
+        imageFit: "fill",
+        imageScale: "scale-x-[1.10] scale-y-[1.10]",
+        imageHoverScale: "hover:scale-x-[1.15] hover:scale-y-[1.15]"
+      }
     ]
   },
   {
@@ -50,25 +73,41 @@ const projectData: Category[] = [
         id: 1,
         title: "Human-Like Voice Agent",
         description: "A sophisticated AI voice agent designed to handle customer support and meeting bookings with natural, human-like speech. Features a centralized dashboard for tracking leads, Calendly integrations, booked meetings, and full call transcripts.",
-        image: "/dashboard-voice-agent.png"
+        image: "/dashboard-voice-agent.png",
+        fullImage: true,
+        imageFit: "fill",
+        imageScale: "scale-x-[1.10] scale-y-[1.10]",
+        imageHoverScale: "hover:scale-x-[1.15] hover:scale-y-[1.15]"
       },
       {
         id: 2,
         title: "Instant Chatbot Generator",
         description: "An automated system that builds a custom AI chatbot in seconds. Simply provide a website URL; the tool scrapes all relevant data and generates a fully-trained, context-aware chatbot ready for deployment.",
-        image: "https://images.unsplash.com/photo-1531746790731-6c087fecd05a?q=80&w=2006&auto=format&fit=crop"
+        image: "/ChatbotGenerationTool.png",
+        fullImage: true,
+        imageFit: "fill",
+        imageScale: "scale-x-[1.60] scale-y-[1.25]",
+        imageHoverScale: "hover:scale-x-[1.65] hover:scale-y-[1.30]"
       },
       {
         id: 3,
         title: "AI Content Strategy Board",
         description: "A comprehensive content planner and management system. Features a visual board for scheduling posts while the underlying AI analyzes competitors and real-time trends to suggest high-converting content ideas.",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
+        image: "/AI Content Strategy Board.png",
+        fullImage: true,
+        imageFit: "fill",
+        imageScale: "scale-x-[1.10] scale-y-[1.10]",
+        imageHoverScale: "hover:scale-x-[1.15] hover:scale-y-[1.15]"
       },
       {
         id: 4,
         title: "Hyper-Scale Email Automation",
         description: "Powerful email orchestration tool capable of sending 10,000 highly personalized emails per day without spamming. Includes automated multi-step follow-ups and advanced reply tracking for maximum engagement.",
-        image: "/emailautomationtool.png"
+        image: "/emailautomationtool.png",
+        fullImage: true,
+        imageFit: "fill",
+        imageScale: "scale-x-[1.30] scale-y-[1.10]",
+        imageHoverScale: "hover:scale-x-[1.35] hover:scale-y-[1.15]"
       }
     ]
   },
@@ -161,14 +200,14 @@ export function ProjectSection() {
                     {/* Image Column */}
                     {project.image && (
                       <div className="flex-[1.2] w-full">
-                        <div className="relative aspect-video rounded-3xl overflow-hidden glass-card p-4 lg:p-12 bg-white/5">
+                        <div className={`relative aspect-video rounded-3xl overflow-hidden glass-card ${project.fullImage ? 'p-0' : 'p-4 lg:p-12'} bg-white/5`}>
                           <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                           <img 
                             src={project.image} 
                             alt={project.title}
                             loading="lazy"
                             decoding="async"
-                            className="w-full h-full object-contain transition-all duration-700 drop-shadow-2xl"
+                            className={`w-full h-full object-${project.imageFit || (project.fullImage ? 'cover' : 'contain')} transition-all duration-700 ${project.imageScale || ''} ${project.imageHoverScale || 'hover:scale-[1.05]'} drop-shadow-2xl`}
                           />
                         </div>
                       </div>
