@@ -106,11 +106,11 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-[40px] md:text-[72px] font-heading font-black leading-[1.0] text-[#111827] mb-6 sm:mb-8 md:mb-10 uppercase flex flex-col items-center justify-center text-center tracking-tighter"
+            className="text-[40px] md:text-[72px] font-heading font-black leading-[1.0] text-[#111827] mb-6 sm:mb-8 md:mb-10 uppercase flex flex-col items-center justify-center text-center tracking-wider"
           >
-            <span>Software</span>
-            <span className="text-primary">That Thinks.</span>
-            <span className="text-black/40">Not Just Runs.</span>
+            <span className="text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine drop-shadow-2xl">Software</span>
+            <span className="text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine drop-shadow-2xl">That Thinks.</span>
+            <span className="text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine drop-shadow-2xl">Not Just Runs.</span>
           </motion.h1>
 
           <motion.p
@@ -133,7 +133,7 @@ export default function Home() {
                 Start a Project
               </Button>
             </a>
-            <Button variant="outline" size="lg" onClick={() => { const el = document.getElementById('projects'); if(el) el.scrollIntoView({ behavior: 'smooth' }); }} className="rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto hover:bg-background/5 border-black/10">
+            <Button variant="outline" size="lg" onClick={() => { const el = document.getElementById('projects'); if(el) el.scrollIntoView({ behavior: 'smooth' }); }} className="rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto hover:bg-background/5 border-black/10 bg-transparent text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">
               View Our Work
             </Button>
           </motion.div>
@@ -155,7 +155,7 @@ export default function Home() {
             <p className="text-primary font-sans font-medium text-xs tracking-[0.3em] uppercase mb-4">
               [ WHAT WE BUILD ]
             </p>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-4">Services Built for the Real World</h2>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-4 text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">Services Built for the Real World</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -200,9 +200,9 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-6 uppercase">[ THE VISION ]</p>
-              <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-8 leading-tight">
+              <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight mb-8 leading-tight text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">
                 One Problem. <br />
-                <span className="text-primary">One Solution.</span>
+                One Solution.
               </h2>
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
                 <p className="font-bold italic text-black">
@@ -262,7 +262,7 @@ export default function Home() {
               },
               {
                 name: "Hashim Sultan",
-                role: "Operations Head",
+                role: "Sales Manager",
                 img: "/hashim.png",
                 desc: "Manages internal systems, processes, and ensures smooth day-to-day operations."
               }
@@ -304,7 +304,7 @@ export default function Home() {
             className="text-center mb-24"
           >
             <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ HOW WE WORK ]</p>
-            <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight mb-6 text-black">A Clear Path from Brief to Results</h2>
+            <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight mb-6 text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">A Clear Path from Brief to Results</h2>
             <p className="max-w-2xl mx-auto text-[15px] font-sans font-normal leading-relaxed text-gray-500">
               No guesswork. No scope creep. Just a repeatable process that works.
             </p>
@@ -359,7 +359,7 @@ export default function Home() {
           >
             <div className="text-center mb-10">
               <p className="font-sans font-medium text-primary text-xs tracking-[0.4em] mb-4 uppercase">[ STRATEGY CALL ]</p>
-              <h2 className="text-3xl md:text-4xl font-heading font-bold tracking-tight mb-4">Book Your Free Strategy Call</h2>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold tracking-tight mb-4 text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">Book Your Free Strategy Call</h2>
               <p className="text-muted-foreground text-sm leading-relaxed">
                 We'll analyze your current lead flow, show you exactly where you're losing money, and build a custom plan to capture every opportunity.
               </p>
@@ -460,7 +460,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Center CTA */}
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-6xl md:text-8xl font-heading font-extrabold tracking-tighter mb-12 uppercase text-black">
+            <h2 className="text-4xl sm:text-6xl md:text-8xl font-heading font-extrabold tracking-tighter mb-12 uppercase text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">
               THE FUTURE IS BUILT.
             </h2>
             <a href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>

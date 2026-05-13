@@ -63,10 +63,10 @@ export function TestimonialsSection() {
       <div className="relative z-10 w-full">
         {/* Heading in Container */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
-          <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ TESTIMONIALS ]</p>
-          <h2 className="text-3xl md:text-5xl font-heading font-black tracking-tight mb-4 text-black uppercase leading-tight">
+          <p className="font-sans font-medium text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine text-xs tracking-[0.3em] mb-4 uppercase">[ TESTIMONIALS ]</p>
+          <h2 className="text-3xl md:text-5xl font-heading font-black tracking-tight mb-4 text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine uppercase leading-tight">
             Don't take our word for it*<br />
-            <span className="text-primary">*TAKE THEIRS</span>
+            *TAKE THEIRS
           </h2>
           <p className="max-w-2xl mx-auto text-base text-gray-500 font-sans">
             From first-time founders to established businesses — here's what working with us feels like.

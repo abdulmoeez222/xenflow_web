@@ -44,24 +44,6 @@ const projectData: Category[] = [
         imageFit: "fill",
         imageScale: "scale-y-[1.20] scale-x-[1.80]",
         imageHoverScale: "hover:scale-y-[1.25] hover:scale-x-[1.85]"
-      },
-      {
-        id: 3,
-        title: "Social Media Agency Website",
-        description: "A high-conversion professional boutique website designed for social media agencies. Built with a focus on portfolio showcasing and client acquisition, providing a modern, sleek digital front for creative excellence.",
-        image: "/wesbite.png",
-        fullImage: true,
-        imageFit: "fill"
-      },
-      {
-        id: 4,
-        title: "3D Immersive Experience",
-        description: "A next-generation 3D interactive website pushing the boundaries of web design. Utilizes advanced WebGL and Three.js technologies to create an immersive, responsive environment that wows visitors at first glance.",
-        image: "/3D_Immersive Experience.png",
-        fullImage: true,
-        imageFit: "fill",
-        imageScale: "scale-x-[1.10] scale-y-[1.10]",
-        imageHoverScale: "hover:scale-x-[1.15] hover:scale-y-[1.15]"
       }
     ]
   },
@@ -108,6 +90,11 @@ const projectData: Category[] = [
         imageFit: "fill",
         imageScale: "scale-x-[1.30] scale-y-[1.10]",
         imageHoverScale: "hover:scale-x-[1.35] hover:scale-y-[1.15]"
+      },
+      {
+        id: 5,
+        title: "AI SEO Engine",
+        description: "An automated SEO powerhouse that performs complete search engine optimization of your website from just a single link. It analyzes your content, identifies keywords, and implements on-page improvements instantly."
       }
     ]
   },
@@ -152,7 +139,7 @@ export function ProjectSection() {
           className="text-center mb-16"
         >
           <p className="font-sans font-medium text-primary text-xs tracking-[0.3em] mb-4 uppercase">[ OUR WORK ]</p>
-          <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight uppercase text-black">Projects</h2>
+          <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight uppercase text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">Projects</h2>
         </motion.div>
 
         {/* Categories Bar */}
@@ -190,7 +177,7 @@ export function ProjectSection() {
                     <div className={`${project.image ? 'flex-1' : 'max-w-3xl'} space-y-6`}>
                       <div className="space-y-2">
                         <span className="text-primary font-sans font-medium text-xs tracking-widest uppercase">[ PROJECT 0{project.id} ]</span>
-                        <h3 className="text-3xl md:text-4xl font-heading font-black tracking-tight text-black">{project.title}</h3>
+                        <h3 className="text-3xl md:text-4xl font-heading font-black tracking-tight text-transparent bg-clip-text bg-[linear-gradient(110deg,#000,35%,#444,50%,#000)] bg-[length:200%_100%] animate-shine">{project.title}</h3>
                       </div>
                       <p className="text-lg text-gray-600 leading-relaxed font-sans">
                         {project.description}
