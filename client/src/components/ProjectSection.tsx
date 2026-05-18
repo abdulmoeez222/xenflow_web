@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 
 interface Project {
   id: number;
@@ -11,6 +12,7 @@ interface Project {
   imageFit?: "cover" | "contain" | "fill";
   imageScale?: string;
   imageHoverScale?: string;
+  link?: string;
 }
 
 interface Category {
@@ -43,7 +45,8 @@ const projectData: Category[] = [
         fullImage: true,
         imageFit: "fill",
         imageScale: "scale-y-[1.20] scale-x-[1.80]",
-        imageHoverScale: "hover:scale-y-[1.25] hover:scale-x-[1.85]"
+        imageHoverScale: "hover:scale-y-[1.25] hover:scale-x-[1.85]",
+        link: "/projects/pharmacy"
       }
     ]
   },
@@ -161,6 +164,15 @@ export function ProjectSection() {
                       <p className="text-lg text-gray-600 leading-relaxed font-sans">
                         {project.description}
                       </p>
+                      {project.link && (
+                        <div className="pt-4">
+                          <Link href={project.link}>
+                            <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest bg-black text-white hover:bg-black/90 cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 shadow-md">
+                              Explore System Details <ArrowRight className="w-3.5 h-3.5" />
+                            </span>
+                          </Link>
+                        </div>
+                      )}
                     </div>
 
                     {/* Image Column */}
